@@ -1,0 +1,56 @@
+<ion-view hide-nav-bar="true">
+    <ion-content class="padding text-center">
+        <div style="height: 25px"></div>
+
+        <img ng-src="{{logo}}" style="width: 175px; height: auto">
+        <h1 class="royal">Shop Assist</h1>
+
+        <div style="height: 25px"></div>
+        <form name="loginForm" ng-submit="submit($event)">
+        <ion-list class="border-none">
+            <ion-item class="item-input border-bottom">
+                <input ng-model="login.email" name="email" type="email" placeholder="Email" required>
+            </ion-item>
+            <ion-item class="item-input" border-bottom>
+                <input ng-model="login.password" name="password" type="password" placeholder="Password" required>
+            </ion-item>
+        </ion-list>
+            <div class="padding">
+                <p ng-show="loginForm.$submitted && loginForm.email.$invalid && !signupForm.username.$pristine">* Username must be an email address</p>
+                <p ng-show="loginForm.$submitted && loginForm.email.$error.required">* Username is required</p>
+                <p ng-show="loginForm.$submitted && loginForm.password.$error.required">* Password is required</p>
+            </div>
+       <!-- <div class="padding">
+            <input type="submit" value="Continue" class="button button-clear button-large">
+      </div>-->
+            <div class="padding">
+                <button ng-hide="isLoading" type="button" class="button button-block button-royal" ng-disabled="loginForm.$invalid" ng-click="submit($event)">Log In</button>
+                <style>
+                    .spinner svg {
+                         width: 80px;
+                         height: 80px;
+                    }
+                </style>
+                <ion-spinner ng-show="isLoading" class="spinner-royal" icon="ripple"></ion-spinner>
+            </div>
+          <div class="padding">
+            <!--<a class="button button-clear button-large" href="#/sign-up-name">
+                Continue
+            </a>-->
+            <div style="height: 10px"></div>
+            <p ng-hide="{{isPrivate}}">Don't have an account? <a href="#/sign-up" class="royal">Create one here</a>.</p>
+             <div style="height: 100px"></div>
+           
+          </div>
+                 <div class="row">  
+               <button class="loginBtn loginBtn--facebook" ng-click="social('facebook')" type="button">
+                &nbsp&nbsp&nbsp&nbsp Login with Facebook
+               </button>
+
+               <button class="loginBtn loginBtn--google" ng-click="social('google')" type="button">
+               &nbsp&nbsp&nbsp&nbsp Login with Google
+                </button>    
+          </div>      
+        </form>
+    </ion-content>
+</ion-view>

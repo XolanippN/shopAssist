@@ -1,0 +1,33 @@
+
+ <ion-view view-title="Shop Assist">
+       <ion-content>
+          <ion-list class="itemcontent"> 
+                 <div class="background" ng-if="!items.length"> 
+                    <div class="backgroundpic" ng-if="!items.length">
+                          <i class="ion-bag"></i>
+                          <h2 class="smalltextpic">Add New Items</h2>
+                      </div>
+                  </div >
+                  <ion-item ng-repeat="(key,item) in items track by item.uid"  class="itemcss" ng-click="tick(item,key)" >
+                         <ion-option-button side="right" class="button-assertive" ng-click="remove(item.uid)" class="itemcontent">
+                          Delete
+                        </ion-option-button>
+                   <div class="row" >
+                        <div class="col-50" >
+                            <span class="threetimes"> {{item.Quantity}} <span class="thex">X</span></span>
+                                 &nbsp&nbsp&nbsp<span class="itemname">{{item.Name}} </span> 
+                            </div>
+                            <div class ="col"  class="col-50here">
+                                <label class="checkbox checkbox-royal" class="check">
+                                    <input type="checkbox"  ng-click="clickItem(item,key); $event.stopPropagation();" ng-model="item.checked"></input>
+                                </label>
+                            </div>
+                  </div>   
+             </ion-item>
+          </ion-list> 
+       </ion-content> 
+         <ion-buttons side="right">
+               <button class="ion-ios-plus-empty" ng-click="addItem()"></button>
+           </ion-buttons>
+   </ion-view>
+

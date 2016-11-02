@@ -1,0 +1,47 @@
+<ion-view hide-nav-bar="true">
+    <ion-content class="padding text-center">
+        <div style="height: 25px"></div>
+        <h4 class="royal">Sign up with</h4>
+        <h1 class="royal">Shop Assist</h1>
+        <div style="height: 25px"></div>
+      <form name="signupForm"  ng-submit="submit($event)">
+        <ion-list class="border-none">
+            <ion-item class="item-input border-bottom">
+                <input ng-model="signup.email" name="email" type="email" placeholder="Email" required>
+            </ion-item>
+            <ion-item class="item-input border-bottom">
+                <input type="password" ng-model="signup.password" name="password"  placeholder="Password" required>
+            </ion-item>
+            <ion-item class="item-input border-bottom">
+                <input type="password" ng-model="signup.confPassword" name="confPassword"  placeholder="Confirm Password" required>
+            </ion-item>
+        </ion-list>
+        <div class="padding">
+          <p ng-show="signupForm.$submitted && signupForm.email.$invalid && !signupForm.username.$pristine">* Username must be an email address</p>
+          <p ng-show="signupForm.$submitted && signupForm.email.$error.required">* Username is required</p>
+          <p ng-show="signupForm.$submitted && signupForm.password.$error.required">* Password is required</p>
+          <p ng-show="signupForm.$submitted && signupForm.confPassword.$error.required">* Password Confirmation is required</p>
+          <p ng-show="signupForm.$submitted && (signupForm.confPassword == signupForm.Password)">* Password Confirmation is required</p>
+        </div>
+        <div class="padding">
+          <button ng-hide="isLoading" type="button" class="button button-block button-royal" ng-disabled="signupForm.$invalid" ng-click="submit($event)">Continue</button>
+            <style>
+                .spinner svg {
+                    width: 80px;
+                    height: 80px;
+                }
+            </style>
+            <ion-spinner ng-show="isLoading" class="spinner-royal" icon="ripple"></ion-spinner>
+        </div>
+
+      </form>
+        <div class="padding">
+            <!--<a class="button button-clear button-large" href="#/sign-up-name">
+                Continue
+            </a>-->
+            <div style="height: 10px"></div>
+               <p>Have an account? <a href="#/login" class="royal">Log in here</a> </p>
+         </div>
+    </ion-content>
+
+</ion-view>
