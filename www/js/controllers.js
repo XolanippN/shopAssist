@@ -338,13 +338,13 @@ $scope.data.products = itemListner.searchNames;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 .controller("loginCtrl", function ( $ionicLoading,$ionicViewService, $scope, $state, User, $ionicPopup, $rootScope, LocalStorageService) {
       
-        /*var passwords = LocalStorageService.getCacheValue("password");
+        var passwords = LocalStorageService.getCacheValue("password");
         var emails = LocalStorageService.getCacheValue("email"); 
             console.log(passwords,emails)   
             if(passwords != null || emails != null){
                 $ionicLoading.show({template:'Welcome Back....'});
                 logUserIn(emails, passwords,"");
-            }*/
+            }
     $scope.login = {};
     function logUserIn(email, pass, social) {
         $scope.isLoading = true;
