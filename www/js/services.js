@@ -35,12 +35,7 @@ angular.module('starter.services',[])
 })
 .factory('Scanner', function($http){
 
-    return {
-        getData: getData
-    };
-
-
-    function getData(Barcode,callback) {
+    getData = function(Barcode,callback2) {
         var BarcodeName;
         var newOrNot;
           return $http.get('https://floating-headland-88014.herokuapp.com/api', {
@@ -48,12 +43,19 @@ angular.module('starter.services',[])
             request_id: Barcode,
           }})
          .then(function(BarcodeName,newOrNot) {
-            callback(BarcodeName,newOrNot);
+             console.log("get here")
+             console.log(BarcodeName)
+             console.log(newOrNot)
+             callback2(BarcodeName,newOrNot);
         }, function(error) {
+            console.log(error)
             return error;
         });
 
     }
+     return {
+        getData: getData
+    };
 })
 .factory('itemListner',function( $timeout,User,Database,LocalStorageService){
  var items = LocalStorageService.getCacheArray(Database.ref_users.child(User.getMyuid()).child('Items').toString());
@@ -158,7 +160,6 @@ angular.module('starter.services',[])
         },
 
         login: function (email, password) {
-
             var firebaseAuth = firebase.auth();
                if (me)
                 return Promise.resolve(me);
@@ -168,8 +169,10 @@ angular.module('starter.services',[])
                 .then(function (authData) {
                     console.log("authdata",authData.uid)
                     addUserToFirebaseUsers(authData);
-                    me = authData;
-                    return Promise.resolve(authData);
+                     me = authData;
+                     LocalStorageService.setCacheValue("password", password); 
+                     LocalStorageService.setCacheValue("email", email);
+                     return Promise.resolve(authData);
                 }).catch(function (error) {
                     //this is where we will get incorrect login
                     console.log(error.message)

@@ -1,7 +1,7 @@
 angular.module('starter.controllers', ['ionic','ngCordova'])
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // adding items to firebase
-.controller('itemsCtrl', function( $cordovaBarcodeScanner,Scanner,Activities,$scope,$rootScope,$timeout, $ionicPopup,$ionicListDelegate, Database, itemListner,User){
+.controller('itemsCtrl', function($ionicLoading, $cordovaBarcodeScanner,Scanner,Activities,$scope,$rootScope,$timeout, $ionicPopup,$ionicListDelegate, Database, itemListner,User){
 // updating item list
   console.log("Adding listen");
   $scope.items = [];
@@ -49,15 +49,17 @@ $scope.data.products = itemListner.searchNames;
     onTap: function(e) {
                       $cordovaBarcodeScanner.scan().then(function(imageData) {
                       if(imageData.text){
-                           var x = Scanner.getData(imageData.text,function(cb){
+                                  $timeout(function (){
+                                  Scanner.getData(imageData.text,function(cb){
                                   $scope.data.name = cb.data.barcodeName;
-                                  console.log(cb.data.barcodeName)
-                                  //if we scraped
-                              if(cb.data.newOrNot == false){
+                                  console.log(cb.data.barcodeName,"called back name")
+                                  console.log(cb.data.newornot,"called back ans")
+                                    //if we scraped
+                              if(cb.data.newornot == false){
                                   var myPopup2 = $ionicPopup.show({
                                       
-                                        title: 'Is this the correct item name?'+ cb.data.barcodeName ,
-                                        subTitle: 'If not enter name',
+                                        title: 'Is this the correct item name?' ,
+                                        subTitle: cb.data.barcodeName,
                                         buttons: [
                                         { text: 'No',
                                           type: 'button-assertive',
@@ -183,7 +185,8 @@ $scope.data.products = itemListner.searchNames;
                                             }]
                                             })
                                }    
-                           });         
+                           }); 
+                           },0,false);        
                         }
 
                        }, function(error) {
@@ -305,18 +308,18 @@ $scope.data.products = itemListner.searchNames;
 })
 .controller('logoutCtrl', function( Activities,Database,User,$timeout,$scope,$ionicHistory,$state,LocalStorageService,$ionicLoading) {
     $scope.logout = function(){
-    $ionicLoading.show({template:'Logging out....'});
-    $timeout(function () {
+     $ionicLoading.show({template:'Logging out....'});
          User.logout();
          User.clearMe();
          Activities.mod = 0;
-        LocalStorageService.clear();
-        $ionicHistory.clearCache();
-        $ionicHistory.clearHistory();
-         $ionicLoading.hide();
         $ionicHistory.nextViewOptions({ disableBack: true, historyRoot: true });
-        }, 50);
-
+    $timeout(function () {
+        $ionicLoading.hide();
+         $state.go('login');
+        ionic.Platform.exitApp(); // stops the app
+        window.close();
+        }, 5000);
+      
 };
     })
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -333,13 +336,17 @@ $scope.data.products = itemListner.searchNames;
 })
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-.controller("loginCtrl", function ($ionicViewService, $scope, $state, User, $ionicPopup, $rootScope, LocalStorageService) {
-    /*    if (window.ga) {
-           window.ga.trackView('Login View')
-        }*/
-    // window.ga.trackView('login')
+.controller("loginCtrl", function ( $ionicLoading,$ionicViewService, $scope, $state, User, $ionicPopup, $rootScope, LocalStorageService) {
+      
+        /*var passwords = LocalStorageService.getCacheValue("password");
+        var emails = LocalStorageService.getCacheValue("email"); 
+            console.log(passwords,emails)   
+            if(passwords != null || emails != null){
+                $ionicLoading.show({template:'Welcome Back....'});
+                logUserIn(emails, passwords,"");
+            }*/
     $scope.login = {};
-    function logUserIn(username, pass, social) {
+    function logUserIn(email, pass, social) {
         $scope.isLoading = true;
         if(social != ""){
              User.loginSocial(social)
@@ -362,7 +369,7 @@ $scope.data.products = itemListner.searchNames;
             });
         }
         else{
-             User.login($scope.login.email, $scope.login.password)
+             User.login(email, pass)
             .then(function (data) {
                 $scope.isLoading = false;
                 if (data.code) {
@@ -377,6 +384,7 @@ $scope.data.products = itemListner.searchNames;
                        // User.saveToken();
                     }
                     console.log(User.me())
+                    $ionicLoading.hide();
                     $state.go('app.items');
                 }
             });
@@ -394,11 +402,10 @@ $scope.data.products = itemListner.searchNames;
     $scope.submit = function ($event) {
         console.log("called this")
            console.log($scope.login.email);
-            console.log($scope.login.password)
-        logUserIn($scope.login.email, $scope.login.password,"");
-
-    };
-    $scope.social = function (social) {
+           console.log($scope.login.password)
+           logUserIn($scope.login.email, $scope.login.password,"");
+       };
+    $scope.social = function ($event,social) {
         logUserIn("", "", social);
     };
 })

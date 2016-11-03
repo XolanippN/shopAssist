@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','ngCordova','autocomplete'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform,$rootScope, User, $location) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -19,10 +19,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','n
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
   });
 })
 
+
 .config(function($stateProvider, $urlRouterProvider) {
+ 
   $stateProvider
 
       .state('sign-up', {
@@ -73,10 +76,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','n
           controller: 'historyCtrl'
         }
       }
-    }),
+    })
  
-
-
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
-});
+ $urlRouterProvider.otherwise('/login');
+})
+
