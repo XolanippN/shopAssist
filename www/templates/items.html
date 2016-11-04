@@ -1,9 +1,11 @@
 
  <ion-view view-title="Shop Assist">
+    <ion-floating-button click="addItem()" has-footer="false" button-color="rgb(253,132,38)" icon="ion-plus" icon-color="#fff">
+    </ion-floating-button>
        <ion-content>
           <ion-list class="itemcontent"> 
                  <div class="background" ng-if="!items.length"> 
-                    <div class="backgroundpic" ng-if="!items.length">
+                    <div class="backgroundpici" ng-if="!items.length">
                           <i class="ion-bag"></i>
                           <h2 class="smalltextpic">Add New Items</h2>
                       </div>
@@ -26,8 +28,5 @@
              </ion-item>
           </ion-list> 
        </ion-content> 
-         <ion-buttons side="right">
-               <button class="ion-ios-plus-empty" ng-click="addItem()"></button>
-           </ion-buttons>
    </ion-view>
 

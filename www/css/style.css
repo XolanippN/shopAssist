@@ -12,7 +12,10 @@
   background: linear-gradient(#e67e00,rgb(253,132,38), #fdaf70);
   color:white!important;
 }
-
+.spinner{
+    stroke: white;
+    fill:white;
+}
 .checkbox {
     position: relative;
     display: inline; 
@@ -43,18 +46,8 @@ background-color: white;
 item.activate{
   color:rgb(255,255,255)
 }
-.ion-ios-plus-empty{
-  border:15px solid rgb(253,132,38);
-  background:rgb(253,132,38);
-  overflow:hidden;
-  color:white;
-  position: absolute !important; 
-  bottom: 2% !important;
-  right: 6% !important;
-  font-size: 120%;
-  border-radius: 350%;
-  box-shadow: 1px 2px 4px 0 rgb(0, 0, 0) !important;
-  max-height:90%;
+#floating-button a {
+    border:none;
 }
 .popup-container {
   background-color:rgba(0,0,0,0.7);
@@ -82,21 +75,27 @@ item.activate{
  font-family: Tahoma, sans-serif, sans-serif,Helvetica,Arial, sans-serif;
   font-size:150%;
 }
+.popup-body{
+  color: white;
+ font-family: Tahoma, sans-serif, sans-serif,Helvetica,Arial, sans-serif;
+  font-size:90%;
+  padding-left:5%;
+}
 input, button, select, textarea {
-    font-family: Tahoma, sans-serif, sans-serif,Helvetica,Arial, sans-serif;
+  font-family: Tahoma, sans-serif, sans-serif,Helvetica,Arial, sans-serif;
 }
 .row {
-padding: 0px; 
+    padding: 0px; 
 }
 .popup-head {
     border-bottom: none;
 }
 .itemcss{
- margin-bottom:2%;
- padding-bottom:1%;
- padding-right:1%;
- padding-top:-3%;
- margin-left:0.2%;
+  margin-bottom:2%;
+  padding-bottom:1%;
+  padding-right:1%;
+  padding-top:-3%;
+  margin-left:0.2%;
   margin-right:0.2%;
   max-height: 65%;
   border-color:rgba(0,0,0,0.1);
@@ -208,9 +207,15 @@ input[type=number] {
 }
 .backgroundpic{
   font-size:1000%;
-  color:rgb(253,132,38);
+  color:rgba(253,132,38,0.5);
    margin:auto;
 }
+.backgroundpici{
+  font-size:800%;
+  color:rgba(253,132,38,0.5);
+  margin:auto;
+}
+
 .backgroundpicbox{
   font-size:1300%;
   color:rgb(253,132,38);
@@ -218,14 +223,14 @@ input[type=number] {
 }
 h2{
   font-size: 15%;
-   color:rgb(253,132,38);
+   color:rgba(253,132,38,0.5);
 }
 .popup-buttons .button {
     -webkit-box-flex: 1;
     -webkit-flex: 1;
     -moz-box-flex: 1;
     -moz-flex: 1;
-    -ms-flex: 1;
+   -ms-flex: 1;
     flex: 1;
     display: block;
     min-height: 45px;
@@ -327,4 +332,15 @@ a:hover {
     color: white;
     font-size:125%;
 }
+
+.button.button-royal.active, .button.button-royal.activated {
+      background-color: rgb(253,132,38); }
+.button.button-royal.button-clear {
+      color: rgb(253,132,38); }
+.button.button-royal.button-outline {
+      border-color: rgb(253,132,38);
+      color: rgb(253,132,38); }
+.button.button-royal.button-outline.active, .button.button-royal.button-outline.activated {
+        background-color: rgb(253,132,38);
+ }
 
