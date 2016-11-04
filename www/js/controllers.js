@@ -50,12 +50,14 @@ $scope.data.products = itemListner.searchNames;
                       $cordovaBarcodeScanner.scan().then(function(imageData) {
                       if(imageData.text){
                                   $timeout(function (){
+                                  $ionicLoading.show({template:'Scanning....'});
                                   Scanner.getData(imageData.text,function(cb){
                                   $scope.data.name = cb.data.barcodeName;
                                   console.log(cb.data.barcodeName,"called back name")
                                   console.log(cb.data.newornot,"called back ans")
                                     //if we scraped
                               if(cb.data.newornot == false){
+                                   $ionicLoading.hide();
                                   var myPopup2 = $ionicPopup.show({
                                       
                                         title: 'Is this the correct item name?' ,
@@ -81,7 +83,8 @@ $scope.data.products = itemListner.searchNames;
                                                   }
                                          }]
                                    })
- //finish pop up two             
+ //finish pop up two                         
+                                              $ionicLoading.hide();
                                             var myPopup = $ionicPopup.show({
                                             title: 'Add New Item', // String. The title of the popup.
                                             scope: $scope,
@@ -134,6 +137,7 @@ $scope.data.products = itemListner.searchNames;
                                             })
                                  
                                }else{
+                                    $ionicLoading.hide();
                                    var myPopup = $ionicPopup.show({
                                             title: 'Add New Item', // String. The title of the popup.
                                             scope: $scope,
@@ -322,19 +326,6 @@ $scope.data.products = itemListner.searchNames;
       
 };
     })
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-.controller('scanCtrl', function($scope, $cordovaBarcodeScanner,Scanner) {
-                  $scope.scanBarcode = function() {
-                  $cordovaBarcodeScanner.scan().then(function(imageData) {
-                    if(imageData.text){
-                      console.log(Scanner.getData(imageData.text).barcodeName);
-                    }
-                    }, function(error) {
-                       console.log("An error happened -> " + error);
-            });
-        };
-})
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 .controller("loginCtrl", function ( $ionicLoading,$ionicViewService, $scope, $state, User, $ionicPopup, $rootScope, LocalStorageService) {
       

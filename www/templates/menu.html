@@ -26,13 +26,13 @@
               <i class="ion-ios-box"></i>&nbsp
               <span class="menutabs">History </span>
         </ion-item>
-        <ion-item menu-close ng-controller="scanCtrl" ng-click="scanBarcode()">
+        <ion-item menu-close ng-controller="itemsCtrl" ng-click="addItem()">
             <i class="ion-qr-scanner"></i>&nbsp
             <span class="menutabs">Scan</span>
         </ion-item>
-         <ion-item menu-close >
-            <i class="ion-android-exit" ng-controller="logoutCtrl"></i>&nbsp
-            <span ng-click="logout()" class="menutabs">Logout</span>
+         <ion-item menu-close ng-click="logout()" ng-controller="logoutCtrl">
+            <i class="ion-android-exit"></i>&nbsp
+            <span class="menutabs">Logout</span>
         </ion-item>
       </ion-list>
     </ion-content>
