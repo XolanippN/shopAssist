@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.ionicframework.shoppinglistapp271480" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>shop Assist</name>
+  <name>Shop Assist</name>
   <description>
         An Ionic Framework and Cordova project.
     </description>
@@ -61,7 +61,6 @@
     <icon src="resources\android\icon\drawable-xxxhdpi-icon.png" density="xxxhdpi"/>
     <splash src="resources\android\splash\drawable-land-ldpi-screen.png" density="land-ldpi"/>
     <splash src="resources\android\splash\drawable-port-ldpi-screen.png" density="port-ldpi"/>
-    <splash src="resources\android\splash\drawable-port-mdpi-screen.png" density="port-mdpi"/>
   </platform>
   <feature name="StatusBar">
     <param name="ios-package" onload="true" value="CDVStatusBar"/>
