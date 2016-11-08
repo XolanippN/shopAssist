@@ -56,6 +56,18 @@ item.activate{
     background-color: rgba(253,132,38,0.9);
      border-color:white;
 }
+.menubodya{
+  border-left: none;
+  border-top: none;
+  border-right: none;
+}
+.menubodyb{
+  border-left: none;
+  border-right: none;
+}
+.paddinga{
+margin-top:0%;
+}
 .popup-container .popup {
     width: 100%;
     max-width: 100%;
@@ -103,8 +115,8 @@ input, button, select, textarea {
 }
 .itemcssh{
     margin-bottom: 2%;
-    padding-bottom: 2%;
-    padding-top:2%;
+    padding-bottom: 4%;
+    padding-top: 4%;
     padding-left: 1.5%;
     border:none;
      box-shadow: 1px 1px 1px 0 gray !important;
@@ -191,12 +203,19 @@ color:rgb(0,0,0);
 }
 input[type=text] {
   color:white;
+  font-size: 200%;
+}
+.item.activated{
+  border-color:white;
+  background-color:white;
 }
 input-placeholder {
   color:white;
 }
 input[type=number] {
   color:white;
+  font-size: 200%;
+  padding-bottom: 20.5%;
 }
 .menutabs{
   font-weight:bold;
@@ -224,6 +243,9 @@ input[type=number] {
 h2{
   font-size: 15%;
    color:rgba(253,132,38,0.5);
+}
+h3{
+  font-size: 250%!important;
 }
 .popup-buttons .button {
     -webkit-box-flex: 1;

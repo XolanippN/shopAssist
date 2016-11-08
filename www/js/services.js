@@ -35,18 +35,17 @@ angular.module('starter.services',[])
 })
 .factory('Scanner', function($http){
 
-    getData = function(Barcode,callback2) {
-        var BarcodeName;
-        var newOrNot;
+    getData = function(Barcode,callback) {
           return $http.get('https://floating-headland-88014.herokuapp.com/api', {
    params:{
             request_id: Barcode,
           }})
          .then(function(BarcodeName,newOrNot) {
              console.log("get here")
-             console.log(BarcodeName)
              console.log(newOrNot)
-             callback2(BarcodeName,newOrNot);
+             console.log(newOrNot)
+              callback(BarcodeName,newOrNot);
+
         }, function(error) {
             console.log(error)
             return error;

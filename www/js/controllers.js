@@ -49,14 +49,201 @@ $scope.data.products = itemListner.searchNames;
     onTap: function(e) {
                       $cordovaBarcodeScanner.scan().then(function(imageData) {
                       if(imageData.text){
-                                  $timeout(function (){
+                                 
+                                  $ionicLoading.show({template:'Scanning....'});
+                                  Scanner.getData(imageData.text,function(cb){
+                                   //$timeout(function (){
+                                   $scope.data.name = cb.data.barcodeName;
+                                   console.log(cb.data.barcodeName,"called back name")
+                                   console.log(cb.data.newOrNot,"called back ans")
+                                  // },0,false); 
+                                    //if we scraped
+                              if(cb.data.newOrNot == false){
+                                $ionicLoading.hide();
+                                  var myPopup2 = $ionicPopup.show({
+                                      
+                                        title: 'Is this the correct item name?' ,
+                                        subTitle: cb.data.barcodeName,
+                                        buttons: [
+                                        { text: 'No',
+                                          type: 'button-assertive',
+                                          onTap: function(e) {                        
+                                                  Database.ref_itemCatalog.child("Wrongbarcodes").child(imageData.text).push({
+                                                      'Name': cb.data.barcodeName,
+                                                   });
+                                              myPopup2.close();
+                                            }
+                                          },
+                                           {
+                                            text: '<b>Yes</b>',
+                                            type: 'button-royal',
+                                            onTap: function(e) { 
+                                                      Database.ref_itemCatalog.child("Rightbarcodes").child(imageData.text).push({
+                                                          'Name': cb.data.barcodeName,
+                                                      });
+                                                      myPopup2.close();
+                                                  }
+                                         }]
+                                   })
+ //finish pop up two                         
+                                              $ionicLoading.hide();
+                                            var myPopup = $ionicPopup.show({
+                                            title: 'Add New Item', // String. The title of the popup.
+                                            scope: $scope,
+                                            // subTitle: 'Enter all fields', // String (optional). The sub-title of the popup.
+                                            templateUrl: 'templates/pop_up.html', // String (optional). The URL of an html template to place in the popup   body.
+                                            buttons: [
+                                                { // Array[Object] (optional). Buttons to place in the popup footer.
+                                                text: 'CANCEL',
+                                                type: 'button-default',
+                                                onTap: function(e) {
+                                                }
+                                            }, 
+                                            { 
+                                                text: 'SCAN',
+                                                type: 'button-royal',
+                                                onTap: function(e) {
+                                                       $ionicPopup.alert({
+                                                        title: 'Already scanned!',    
+                                                        });
+                                                }
+                                            }, 
+                                            {
+                                                text: 'ADD',
+                                                type: 'button-royal',
+                                                onTap: function(e) {
+                                                if (!$scope.data.name ) {
+                                                        e.preventDefault();
+                                                        $ionicPopup.alert({
+                                                        title: 'Please enter item name!',    
+                                                        });
+                                                    }
+                                                    else if(!$scope.data.quantity){
+                                                        e.preventDefault();
+                                                        $ionicPopup.alert({
+                                                        title: 'Please enter item quantity!',    
+                                                        });
+                                                    }
+                                                    else {
+                                                            console.log("Pushing item");
+
+                                                                Database.ref_users.child(User.getMyuid()).child('Items').push({
+                                                                'Name': $scope.data.name,
+                                                                'Quantity': $scope.data.quantity,
+                                                                'Shop':"",// $scope.data.shop,
+                                                            });
+                                                            myPopup.close();
+                                                            }
+                                                }
+                                            }]
+                                            })
+                                 
+                               }else{
+                                    $ionicLoading.hide();
+                                   var myPopup = $ionicPopup.show({
+                                            title: 'Add New Item', // String. The title of the popup.
+                                            scope: $scope,
+                                            // subTitle: 'Enter all fields', // String (optional). The sub-title of the popup.
+                                            templateUrl: 'templates/pop_up.html', // String (optional). The URL of an html template to place in the popup   body.
+                                            buttons: [
+                                                { // Array[Object] (optional). Buttons to place in the popup footer.
+                                                text: 'CANCEL',
+                                                type: 'button-default',
+                                                onTap: function(e) {
+                                                }
+                                            }, 
+                                            { 
+                                                text: 'SCAN',
+                                                type: 'button-royal',
+                                                onTap: function(e) {
+                                                       $ionicPopup.alert({
+                                                        title: 'Already scanned!',    
+                                                        });
+                                                }
+                                            }, 
+                                            {
+                                                text: 'ADD',
+                                                type: 'button-royal',
+                                                onTap: function(e) {
+                                                if (!$scope.data.name ) {
+                                                        e.preventDefault();
+                                                        $ionicPopup.alert({
+                                                        title: 'Please enter item name!',    
+                                                        });
+                                                    }
+                                                    else if(!$scope.data.quantity){
+                                                        e.preventDefault();
+                                                        $ionicPopup.alert({
+                                                        title: 'Please enter item quantity!',    
+                                                        });
+                                                    }
+                                                    else {
+                                                            console.log("Pushing item");
+
+                                                                Database.ref_users.child(User.getMyuid()).child('Items').push({
+                                                                'Name': $scope.data.name,
+                                                                'Quantity': $scope.data.quantity,
+                                                                'Shop':"",// $scope.data.shop,
+                                                            });
+                                                            myPopup.close();
+                                                            }
+                                                }
+                                            }]
+                                            })
+                               }    
+                           });        
+                        }
+
+                       }, function(error) {
+                        console.log("An error happened -> " + error);
+                   });
+    }
+  }, 
+  {
+    text: 'ADD',
+    type: 'button-royal',
+    onTap: function(e) {
+       if (!$scope.data.name ) {
+             e.preventDefault();
+             $ionicPopup.alert({
+             title: 'Please enter item name!',    
+            });
+          }
+          else if(!$scope.data.quantity){
+              e.preventDefault();
+              $ionicPopup.alert({
+             title: 'Please enter item quantity!',    
+            });
+          }
+          else {
+                 console.log("Pushing item");
+
+                    Database.ref_users.child(User.getMyuid()).child('Items').push({
+                    'Name': $scope.data.name,
+                    'Quantity': $scope.data.quantity,
+                    'Shop':"",// $scope.data.shop,
+                  });
+                  myPopup.close();
+                }
+    }
+  }]
+})
+}
+
+$scope.scanItem = function(){
+$scope.data = {};
+$scope.data.products = itemListner.searchNames;
+ $scope.data.quantity = 1;
+                      $cordovaBarcodeScanner.scan().then(function(imageData) {
+                      if(imageData.text){
+                                  
                                   $ionicLoading.show({template:'Scanning....'});
                                   Scanner.getData(imageData.text,function(cb){
                                   $scope.data.name = cb.data.barcodeName;
                                   console.log(cb.data.barcodeName,"called back name")
-                                  console.log(cb.data.newornot,"called back ans")
+                                  console.log(cb.data.newOrNot,"called back ans")
                                     //if we scraped
-                              if(cb.data.newornot == false){
+                              if(cb.data.newOrNot == false){
                                    $ionicLoading.hide();
                                   var myPopup2 = $ionicPopup.show({
                                       
@@ -189,44 +376,12 @@ $scope.data.products = itemListner.searchNames;
                                             }]
                                             })
                                }    
-                           }); 
-                           },0,false);        
+                           });         
                         }
 
                        }, function(error) {
                         console.log("An error happened -> " + error);
                    });
-    }
-  }, 
-  {
-    text: 'ADD',
-    type: 'button-royal',
-    onTap: function(e) {
-       if (!$scope.data.name ) {
-             e.preventDefault();
-             $ionicPopup.alert({
-             title: 'Please enter item name!',    
-            });
-          }
-          else if(!$scope.data.quantity){
-              e.preventDefault();
-              $ionicPopup.alert({
-             title: 'Please enter item quantity!',    
-            });
-          }
-          else {
-                 console.log("Pushing item");
-
-                    Database.ref_users.child(User.getMyuid()).child('Items').push({
-                    'Name': $scope.data.name,
-                    'Quantity': $scope.data.quantity,
-                    'Shop':"",// $scope.data.shop,
-                  });
-                  myPopup.close();
-                }
-    }
-  }]
-})
 }
   $scope.tick = function(item,uid){
      Activities.mod =  Activities.mod + 1;
