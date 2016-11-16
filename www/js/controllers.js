@@ -30,7 +30,7 @@ angular.module('starter.controllers', ['ionic','ngCordova'])
 $scope.addItem = function(){
 $scope.data = {};
 $scope.data.products = itemListner.searchNames;
- $scope.data.quantity = 1;
+// $scope.data.quantity = 1;
  var myPopup = $ionicPopup.show({
  title: 'Add New Item', // String. The title of the popup.
  scope: $scope,

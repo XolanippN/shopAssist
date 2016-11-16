@@ -2,7 +2,7 @@
  <ion-view view-title="History">
        <ion-content>
          <ion-list>
-             <ion-item  ng-repeat = "(key,date) in dates" class="itemcsshistory">
+             <ion-item style="margin-bottom:2px;"  ng-repeat = "(key,date) in dates" class="itemcsshistory">
                     &nbsp&nbsp&nbsp&nbsp<span class="datesheader">{{key}}</span>
                     <div class="background" ng-if="!dates[key]">
                         <div class="backgroundpic" ng-if="!dates[key]">
@@ -10,11 +10,11 @@
                             <h2 class="smalltextpic">History is Empty</h2>
                         </div>
                     </div>
-                    <ion-item  ng-repeat = "purchase in dates[key]" class="itemcssh"> 
-                        <div>
-                             <span  class="threetimesh">{{purchase.Quantity}}</span><span class = "thexh">x</span>
-                             <span  class="itemname">{{purchase.Name}}</span>
-                             <span  class="smalltext" class="timeinhistory"><mydate>{{purchase.Date | date:'HH:mm'}}<mydate></span> 
+                    <ion-item style="margin-bottom:5px; padding:10px; box-shadow: 0px 0.4px 0px 0 gray !important;border: none;"  class="item item-text-wrap"  ng-repeat = "purchase in dates[key]" class="itemcssh"> 
+                        <div class="row">
+                             <div class="col-10"  style="padding-top: 4px;"><span class="threetimesh">{{purchase.Quantity}}</span>&nbsp&nbsp<span class = "thexh">x</span></div>
+                             <div class="col-80" style="padding-top: 4px;" ><span class="itemname" style="padding-top: 4px; margin-left:0px;">{{purchase.Name}}</span></div>
+                             <div class="col" ><mydate class="smalltext" class="timeinhistory">{{purchase.Date | date:'HH:mm'}}<mydate></div> 
                         </div>       
                         <div class="smalltext">{{purchase.shop}}</div>
                      </ion-item>

@@ -10,20 +10,24 @@
                           <h2 class="smalltextpic">Add New Items</h2>
                       </div>
                   </div >
-                  <ion-item ng-repeat="(key,item) in items track by item.uid"  class="itemcss" ng-click="tick(item,key)" >
-                         <ion-option-button side="right" class="button-assertive" ng-click="remove(item.uid)" class="itemcontent">
+                  <ion-item style="margin-bottom:5px;  box-shadow: 0px 0.4px 0px 0 gray !important;border: none;" class="item item-text-wrap" ng-repeat="(key,item) in items track by item.uid"  class="itemcss" ng-click="tick(item,key)" >
+                         <ion-option-button side="right" class="button-assertive" ng-click="remove(item.uid)">
                           Delete
                         </ion-option-button>
-                   <div class="row" >
-                        <div class="col-50" >
-                            <span class="threetimes"> {{item.Quantity}} <span class="thex">X</span></span>
-                                 &nbsp&nbsp&nbsp<span class="itemname">{{item.Name}} </span> 
-                            </div>
-                            <div class ="col"  class="col-50here">
-                                <label class="checkbox checkbox-balanced" class="check">
-                                    <input type="checkbox"  ng-click="clickItem(item,key); $event.stopPropagation();" ng-model="item.checked"></input>
-                                </label>
-                            </div>
+                                  <div class="row" >
+                                      <div class= "col-10"style="padding-top:9px;" >
+                                             <span  class="threetimes">&nbsp {{item.Quantity}} &nbsp
+                                             <span  class="thex">X</span></span>
+                                     </div>
+                                     <div style="padding-top:9px; margin-left:0px;" class= "col-80">
+                                        <span  class="itemname"> {{item.Name}} </span> 
+                                      </div>
+                                        <div class ="col"  class="col-50here">
+                                            <label class="checkbox checkbox-balanced" class="check">
+                                                <input type="checkbox"  ng-click="clickItem(item,key); $event.stopPropagation();" ng-model="item.checked"></input>
+                                            </label>
+                                        </div>
+                                     </div>
                   </div>   
              </ion-item>
           </ion-list> 

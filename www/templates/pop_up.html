@@ -3,11 +3,11 @@
                       <div >
                            <ion-icon name="ion-ios-cart" item-left></ion-icon>
                          </div>
-                  <div class="row" class="givePopupSpace">
-                        <div class="quantitiySize">
-                              <input type="number" ng-model="data.quantity"  class="popupinput" placeholder="1 X"  name="quantity"/>
+                  <div class="row"style="margin-left:10%;width:90%;">
+                        <div class="col-20" style="padding:1px;">
+                            <input style="padding-top:9%;" type="number" ng-model="data.quantity"  class="popupinput" placeholder="1 X"  name="quantity"/>
                         </div>
-                         <div>
+                         <div class="col-70">
                             <autocomplete ng-model="data.name" attr-placeholder="Enter Item Name"  name="name" click-activation="true" 
                             data ="data.products" class="popupinput"></autocomplete>
                          </div>
