@@ -56,6 +56,69 @@ angular.module('starter.services',[])
         getData: getData
     };
 })
+.factory('periodListner',function(User,Database,LocalStorageService){
+    // looking for change
+var dailyItems = LocalStorageService.getCacheArray('daily');
+var currentDay = LocalStorageService.getCacheArray("day");
+   // add looking for 7
+var weeklyItems = LocalStorageService.getCacheArray('weekly');
+   // add monthly, looking for change
+var monthlyItems = LocalStorageService.getCacheArray('monthly');
+var currentMonth = LocalStorageService.getCacheArray('month');
+
+ function addPeriodItems(){
+   
+    var a = new Date(Date.now()); 
+    var dat = a.getDate();
+   
+    
+     if(dat !== parseInt(currentDay.join(""))){
+         for(item in dailyItems){
+             console.log( dailyItems[item])
+            Database.ref_users.child(User.getMyuid()).child('Items').push({
+                     'Name': dailyItems[item].Name,
+                     'Quantity': dailyItems[item].Quantity,
+                     'Shop':"",// $scope.data.shop,
+                   });
+         }
+     LocalStorageService.setCacheValue("day",String(dat))
+      }
+    var dayOfWeek = a.getDay();
+    console.log(dayOfWeek)
+    if(dayOfWeek == 0){
+        for(item in weeklyItems){
+        Database.ref_users.child(User.getMyuid()).child('Items').push({
+                     'Name': dailyItems[item].Name,
+                     'Quantity': dailyItems[item].Quantity,
+                     'Shop':"",// $scope.data.shop,
+                   }); 
+        }
+        
+    }
+    var month = a.getMonth();
+    console.log( month,parseInt(currentMonth.join("")))
+    if(month !== parseInt(currentMonth.join(""))){
+         for(item in monthlyItems){
+            Database.ref_users.child(User.getMyuid()).child('Items').push({
+                     'Name': dailyItems[item].Name,
+                     'Quantity': dailyItems[item].Quantity,
+                     'Shop':"",// $scope.data.shop,
+             });
+         }
+        
+      }
+       LocalStorageService.setCacheValue('month', month)
+}
+
+
+ return{
+     dailyItems:dailyItems,
+     weeklyItems:weeklyItems,
+     monthlyItems: monthlyItems,
+     addPeriodItems:addPeriodItems,
+   }
+
+})
 .factory('itemListner',function( $timeout,User,Database,LocalStorageService){
  var items = LocalStorageService.getCacheArray(Database.ref_users.child(User.getMyuid()).child('Items').toString());
  var searchNames = LocalStorageService.getCacheArray("names");

@@ -1,7 +1,9 @@
 .item-complex .item-content{
    padding: 6px 6px 6px 4px;
 }
-
+.popup-buttons .button:last-child {
+    background-color:green;
+}
 .quantitiySize{
    width:15%;
    margin-left: 20%;
@@ -37,6 +39,8 @@ input[type="checkbox"] {
     border-color: transparent;
     background-color: rgb(253,132,38);
     color: #fff;
+    margin-left: 28%;
+    margin-top: 20%;
 }
 .item.activated.item-complex > .item-content  {
 border-color: white;
@@ -115,6 +119,9 @@ input, button, select, textarea {
     box-shadow: 1px 1px 1px 0 gray !important;
 
 }
+.button.button-assertive {
+    margin-left:5%;
+}
 .datesheader {
     margin: 4%;
     font-weight: bold;
@@ -167,22 +174,18 @@ input, button, select, textarea {
   position:absolute;
   font-size:65%;
   color: black;
-  margin-top: 14%;
 }
 .thexh{
   font-size:85%;
   color: rgba(0,0,0,0.5);
-  padding-right:1%;
-  padding-bottom:5%;
-  margin-bottom:5%;
-  padding-top:0px;
+  position:absolute;
 }
 .bar .title {
     font-family: 'Work Sans', sans-serif;
     font-family: 'Raleway', sans-serif;
     font-family: 'Dosis', sans-serif;
     font-family: 'Catamaran', sans-serif;
-    font-size: 17px;
+    font-size: 25px;
     font-weight: normal;
     line-height: 44px;
 }
@@ -257,11 +260,12 @@ h3{
     flex: 1;
     display: block;
     min-height: 45px;
-    border-radius: 2px;
     line-height: 20px;
     margin-right: 5px;
     border-radius:6%;
+    max-width:40%;
 }
+
 .header{
   background-color:rgb(253,132,38);
 }
@@ -340,19 +344,19 @@ input:-ms-input-placeholder { /* IE10+ *//*
 
 }
 a {
-  color: black;
+  color: white;
   font-family: 'Work Sans', sans-serif;
   font-family: 'Raleway', sans-serif;
   font-family: 'Dosis', sans-serif;
   font-family: 'Catamaran', sans-serif;
    text-decoration: none;
    font-size:120%;
-   border: 0.5px solid black;
+   border: 0.5px solid white;
+   background-color: rgba(253,132,38,0.5);
    padding:3%;
 }
 /* mouse over link */
 a:hover {
-    color: white;
     font-size:125%;
 }
 

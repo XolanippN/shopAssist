@@ -1,8 +1,10 @@
 angular.module('starter.controllers', ['ionic','ngCordova'])
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // adding items to firebase
-.controller('itemsCtrl', function($ionicLoading, $cordovaBarcodeScanner,Scanner,Activities,$scope,$rootScope,$timeout, $ionicPopup,$ionicListDelegate, Database, itemListner,User){
+.controller('itemsCtrl', function(LocalStorageService,periodListner,$ionicModal,$ionicLoading, $cordovaBarcodeScanner,Scanner,Activities,$scope,$rootScope,$timeout, $ionicPopup,$ionicListDelegate, Database, itemListner,User){
 // updating item list
+ periodListner.addPeriodItems();
+ $scope.show = false;
   console.log("Adding listen");
   $scope.items = [];
   // update from local storage
@@ -30,7 +32,7 @@ angular.module('starter.controllers', ['ionic','ngCordova'])
 $scope.addItem = function(){
 $scope.data = {};
 $scope.data.products = itemListner.searchNames;
-// $scope.data.quantity = 1;
+ $scope.data.quantity = 1;
  var myPopup = $ionicPopup.show({
  title: 'Add New Item', // String. The title of the popup.
  scope: $scope,
@@ -66,7 +68,7 @@ $scope.data.products = itemListner.searchNames;
                                         subTitle: cb.data.barcodeName,
                                         buttons: [
                                         { text: 'No',
-                                          type: 'button-assertive',
+                                          type: 'button-royal',
                                           onTap: function(e) {                        
                                                   Database.ref_itemCatalog.child("Wrongbarcodes").child(imageData.text).push({
                                                       'Name': cb.data.barcodeName,
@@ -104,7 +106,11 @@ $scope.data.products = itemListner.searchNames;
                                                 type: 'button-royal',
                                                 onTap: function(e) {
                                                        $ionicPopup.alert({
-                                                        title: 'Already scanned!',    
+                                                        title: 'Already scanned!',  
+                                                         buttons: [{
+                                                                text:'Ok',
+                                                                type: 'button-positive'
+                                                            }]   
                                                         });
                                                 }
                                             }, 
@@ -115,13 +121,21 @@ $scope.data.products = itemListner.searchNames;
                                                 if (!$scope.data.name ) {
                                                         e.preventDefault();
                                                         $ionicPopup.alert({
-                                                        title: 'Please enter item name!',    
+                                                        title: 'Please enter item name!', 
+                                                         buttons: [{
+                                                                text:'Ok',
+                                                                type: 'button-positive'
+                                                            }]    
                                                         });
                                                     }
                                                     else if(!$scope.data.quantity){
                                                         e.preventDefault();
                                                         $ionicPopup.alert({
-                                                        title: 'Please enter item quantity!',    
+                                                        title: 'Please enter item quantity!',
+                                                            buttons: [{
+                                                                text:'Ok',
+                                                                type: 'button-positive'
+                                                            }]  
                                                         });
                                                     }
                                                     else {
@@ -157,7 +171,11 @@ $scope.data.products = itemListner.searchNames;
                                                 type: 'button-royal',
                                                 onTap: function(e) {
                                                        $ionicPopup.alert({
-                                                        title: 'Already scanned!',    
+                                                        title: 'Already scanned!', 
+                                                             buttons: [{
+                                                                text:'Ok',
+                                                                type: 'button-positive'
+                                                            }]      
                                                         });
                                                 }
                                             }, 
@@ -168,13 +186,21 @@ $scope.data.products = itemListner.searchNames;
                                                 if (!$scope.data.name ) {
                                                         e.preventDefault();
                                                         $ionicPopup.alert({
-                                                        title: 'Please enter item name!',    
+                                                        title: 'Please enter item name!', 
+                                                         buttons: [{
+                                                                text:'Ok',
+                                                                type: 'button-positive'
+                                                            }]      
                                                         });
                                                     }
                                                     else if(!$scope.data.quantity){
                                                         e.preventDefault();
                                                         $ionicPopup.alert({
-                                                        title: 'Please enter item quantity!',    
+                                                        title: 'Please enter item quantity!', 
+                                                         buttons: [{
+                                                                text:'Ok',
+                                                                type: 'button-positive'
+                                                            }]      
                                                         });
                                                     }
                                                     else {
@@ -206,13 +232,21 @@ $scope.data.products = itemListner.searchNames;
        if (!$scope.data.name ) {
              e.preventDefault();
              $ionicPopup.alert({
-             title: 'Please enter item name!',    
+             title: 'Please enter item name!',
+              buttons: [{
+                text:'Ok',
+                type: 'button-positive'
+            }]    
             });
           }
           else if(!$scope.data.quantity){
               e.preventDefault();
               $ionicPopup.alert({
-             title: 'Please enter item quantity!',    
+             title: 'Please enter item quantity!', 
+                buttons: [{
+                text:'Ok',
+                type: 'button-positive'
+            }]    
             });
           }
           else {
@@ -383,23 +417,124 @@ $scope.data.products = itemListner.searchNames;
                         console.log("An error happened -> " + error);
                    });
 }
-  $scope.tick = function(item,uid){
-     Activities.mod =  Activities.mod + 1;
-      if(Activities.mod%2 != 0){//first time
-      item.checked = true;
-      $timeout(function (){
-      $scope.clickItem(item,uid);
-        },2000,false);
-      }else{
-        item.checked = false; 
-        Activities.mod = 0;
-      }
-  }
   
   $scope.remove = function(uid){
      Database.ref_users.child(User.getMyuid()).child('Items').child(uid).remove()
   }
+  $scope.closeFooter = function(){
+    $scope.show = false;
+   }
 
+
+
+  $scope.showFooter = function(items,item,key){ 
+   if(item.clicked == true) {
+    item.clicked = false;
+   }
+  else if(item.clicked == false) {
+    item.clicked = true;
+   }
+   else{
+   item.clicked = true;
+   }
+        $scope.show = true;
+           $ionicModal.fromTemplateUrl('templates/my-modal.html', {
+           scope: $scope,
+           animation: 'slide-in-up'
+            }).then(function(modal) {
+                $scope.modal = modal;
+            });
+            $scope.openModal = function() {
+                $scope.modal.show();
+            };
+            $scope.closeModal = function() {
+                $scope.modal.hide();
+            };
+           // Cleanup the modal when we're done with it!
+            $scope.$on('$destroy', function() {
+                $scope.modal.remove();
+            });
+            /* // Execute action on hide modal
+            $scope.$on('modal.hidden', function() {
+                 $scope.modal.hide();
+            });
+            // Execute action on remove modal
+            $scope.$on('modal.removed', function() {
+                // Execute action
+            });*/
+             $scope.daily = function(){
+                console.log("clicked d")
+             for(ite in items){
+                     console.log(items[ite])
+                    if(items[ite].clicked){
+                         items[ite].clicked =false; 
+                         periodListner.dailyItems.push(items[ite]) 
+                         console.log( periodListner.dailyItems) 
+                    }
+                 }
+             LocalStorageService.setCacheValue("daily",periodListner.dailyItems)
+                       $scope.modal.remove();  
+                        $scope.show = false;
+            }
+            $scope.weekly= function(){
+                console.log("clicked w")
+                 for(ite in items){
+                     console.log(items[ite])
+                    if(items[ite].clicked){
+                         items[ite].clicked=false;  
+                         periodListner.weeklItems.push(items[ite]) 
+                    }
+                 }
+             LocalStorageService.setCacheValue("weekly",periodListner.weeklyItems)
+                       $scope.modal.remove(); 
+                        $scope.show = false;
+
+            }
+            $scope.monthly= function(){
+                console.log("clicked m")
+                 for(ite in items){
+                     console.log(items[ite])
+                    if(items[ite].clicked){
+                         items[ite].clicked=false;
+                         periodListner.monthlyItems.push(items[ite])   
+                    }
+                 }
+               LocalStorageService.setCacheValue("monthly",periodListner.monthlyItems)
+                       $scope.modal.remove();  
+                        $scope.show = false;
+            } 
+    
+    $scope.buyNow = function(){
+     var myPopup3 = $ionicPopup.show({                          
+             title: 'Buy all selected items now?' ,
+             buttons: [
+                { text: 'No',
+                type: 'button-assertive',
+                onTap: function(e) {                        
+                     // $scope.show = false;
+                      myPopup3.close();
+                    }
+                 },
+                 {
+                text: '<b>Yes</b>',
+                type: 'button-royal',
+                onTap: function(e) {
+                 for(ite in items){
+                     console.log(items[ite])
+                    if(items[ite].clicked){
+                        items[ite].checked = true;
+                        $scope.clickItem(items[ite],items[ite].uid)
+                        items[ite].clicked==false;
+                        myPopup3.close();  
+                        $scope.show = false;
+                    }
+                 }
+                }
+            }]
+          })
+   }
+  
+}
   $scope.clickItem = function(item,uid){
    $timeout(function (){
    console.log(item)
@@ -432,17 +567,18 @@ $scope.data.products = itemListner.searchNames;
                 'Item-id':item.uid
             }); 
 
-      Activities.chosenItems.push(item);
+           Activities.chosenItems.push(item);
+      
     for (purchase in Activities.chosenItems){
         //remove from list
         Database.ref_users.child(User.getMyuid()).child('Items').child(Activities.chosenItems[purchase].uid).remove()
      }
       Activities.chosenItems = [];
-      },3000,false);
+      },4000,false);
     }
-    },3000,false);
+    },4000,false);
   }
-
+  
 })
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 .controller('historyCtrl', function($scope,$timeout,Database,itemHistoryListner) {
@@ -454,6 +590,7 @@ $scope.data.products = itemListner.searchNames;
         console.log("Applying in history callback");
         if(dateHistory == null){
            $scope.dates = temp;
+           console.log("history empty")
         }
         else{
          $scope.dates = dateHistory;
@@ -474,7 +611,7 @@ $scope.data.products = itemListner.searchNames;
         $ionicHistory.nextViewOptions({ disableBack: true, historyRoot: true });
     $timeout(function () {
         $ionicLoading.hide();
-         $state.go('login');
+        // $state.go('login');
         ionic.Platform.exitApp(); // stops the app
         window.close();
         }, 5000);
@@ -483,9 +620,9 @@ $scope.data.products = itemListner.searchNames;
     })
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 .controller("loginCtrl", function ( $ionicLoading,$ionicViewService, $scope, $state, User, $ionicPopup, $rootScope, LocalStorageService) {
-      
         var passwords = LocalStorageService.getCacheValue("password");
         var emails = LocalStorageService.getCacheValue("email"); 
+         $scope.passwords = passwords;
             console.log(passwords,emails)   
             if(passwords != null || emails != null){
                 $ionicLoading.show({template:'Welcome Back....'});
@@ -620,7 +757,8 @@ function timeConverter(UNIX_timestamp){
             var hour = a.getHours();
             var min = a.getMinutes();
             var sec = a.getSeconds();
-            var months= ['January','February','March','April','May','June','July','August','september','October','November','December' ]
+            var months= ['January','February','March','April','May','June','July','August',
+                         'september','October','November','December']
             var time = date + ' ' + months[month] + ' ' + year ;
             // + ' ' + hour + ':' + min + ':' + sec
             console.log(time)

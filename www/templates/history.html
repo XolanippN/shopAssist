@@ -12,8 +12,11 @@
                     </div>
                     <ion-item style="margin-bottom:5px; padding:10px; box-shadow: 0px 0.4px 0px 0 gray !important;border: none;"  class="item item-text-wrap"  ng-repeat = "purchase in dates[key]" class="itemcssh"> 
                         <div class="row">
-                             <div class="col-10"  style="padding-top: 4px;"><span class="threetimesh">{{purchase.Quantity}}</span>&nbsp&nbsp<span class = "thexh">x</span></div>
-                             <div class="col-80" style="padding-top: 4px;" ><span class="itemname" style="padding-top: 4px; margin-left:0px;">{{purchase.Name}}</span></div>
+                             <div class="col-10"  style="padding-top:4px;font-size:105%;">
+                                 <span class="threetimesh">{{purchase.Quantity}}&nbsp</span>
+                                 <span class="thexh">x</span>
+                             </div>
+                             <div class="col-80" style="padding-top:4px;margin-top: 0.5%; "><span class="itemname" style="padding-top: 4px; margin-left:3px;font-size:107%;">{{purchase.Name}}</span></div>
                              <div class="col" ><mydate class="smalltext" class="timeinhistory">{{purchase.Date | date:'HH:mm'}}<mydate></div> 
                         </div>       
                         <div class="smalltext">{{purchase.shop}}</div>

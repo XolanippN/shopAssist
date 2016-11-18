@@ -1,8 +1,8 @@
 
  <ion-view view-title="Shop Assist">
-    <ion-floating-button click="addItem()" has-footer="false" button-color="rgb(253,132,38)" icon="ion-plus" icon-color="#fff">
+    <ion-floating-button ng-if="!show" click="addItem()" has-footer="false"button-color="rgb(253,132,38)" icon="ion-plus" icon-color="#fff">
     </ion-floating-button>
-       <ion-content>
+       <ion-content class="has-footer">
           <ion-list class="itemcontent"> 
                  <div class="background" ng-if="!items.length"> 
                     <div class="backgroundpici" ng-if="!items.length">
@@ -10,17 +10,23 @@
                           <h2 class="smalltextpic">Add New Items</h2>
                       </div>
                   </div >
-                  <ion-item style="margin-bottom:5px;  box-shadow: 0px 0.4px 0px 0 gray !important;border: none;" class="item item-text-wrap" ng-repeat="(key,item) in items track by item.uid"  class="itemcss" ng-click="tick(item,key)" >
+                  <ion-item  style="margin-bottom:5px;box-shadow: 0px 0.4px 0px 0 gray !important;border: none;" 
+                  class="item item-text-wrap" ng-repeat="(key,item) in items track by item.uid"
+                         ng-click="showFooter(items,item,key)" >
+                     <div ng-class="{'.pending-delete': clicked }">
                          <ion-option-button side="right" class="button-assertive" ng-click="remove(item.uid)">
                           Delete
                         </ion-option-button>
-                                  <div class="row" >
-                                      <div class= "col-10"style="padding-top:9px;" >
-                                             <span  class="threetimes">&nbsp {{item.Quantity}} &nbsp
-                                             <span  class="thex">X</span></span>
+                                   <div class="row">
+                                      <div class= "col-10"style="padding-top:9px;">
+                                             <span  class="threetimes" style="font-size:120%;">{{item.Quantity}}</span>
+                                             <span class="thex">&nbsp&nbspX</span>
                                      </div>
                                      <div style="padding-top:9px; margin-left:0px;" class= "col-80">
-                                        <span  class="itemname"> {{item.Name}} </span> 
+                                         <span  ng-if= "!item.checked && !item.clicked" style="font-size:120%;"  class="itemname"> {{item.Name}} </span> 
+                                         <span  ng-if= "item.checked && !item.clicked" style="font-size:120%;"  class="itemname"><strike>{{item.Name}}</strike></span>
+                                         <span  ng-if= "!item.checked && item.clicked" style="font-size:120%;color:green;"  class="itemname"> {{item.Name}} </span> 
+                                         <span  ng-if= "item.checked && item.clicked" style="font-size:120%;color:green"  class="itemname"><strike>{{item.Name}}</strike></span>
                                       </div>
                                         <div class ="col"  class="col-50here">
                                             <label class="checkbox checkbox-balanced" class="check">
@@ -28,9 +34,28 @@
                                             </label>
                                         </div>
                                      </div>
-                  </div>   
-             </ion-item>
+                      </div>
+               </ion-item>
           </ion-list> 
        </ion-content> 
+           <ion-footer-bar ng-if="show" align-title="left" style=" rgba(24,24,24,0.2) 0px 0.1px 0.11px 0.56px !important;">
+            <div class="row">
+                <div class="col-offset-10"></div>
+                <div class="col">
+                     <i style="color:green;font-size:130%;" class="ion-checkmark"  ng-click="buyNow()"></i>
+                </div>
+                 <div class="col">
+                     <i  style="color:orange;font-size:130%;" class="ion-calendar"  ng-click="openModal()"></i>
+                </div>
+                 <div class="col">
+                     <i style="color:blue;font-size:130%;" class="ion-plus"  ng-click="AddAttribute()"></i>
+                </div>
+                 <div class="col">
+                     <i style="color:red;font-size:130%;" class="ion-close" ng-click="closeFooter()"></i>
+                </div>
+                
+             </div>
+           </ion-footer-bar>
+           
    </ion-view>
 
