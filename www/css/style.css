@@ -1,3 +1,24 @@
+div.item-content{
+  background-color:inherit!important;
+}
+a.item-content.activated{
+background-color: white!important;
+}
+.loginlink{
+ border:none!important;
+ background-color:transparent!important;
+ padding:0!important;
+  font-size: 100%;
+  margin-left: 1%;
+  font-family: Tahoma, sans-serif, sans-serif,Helvetica,Arial, sans-serif;
+  text-decoration: underline;
+}
+.loginlink:hover{
+  font-size: 108%;
+}
+.itemb {
+  background-color: gainsboro!important;
+}
 .item-complex .item-content{
    padding: 6px 6px 6px 4px;
 }

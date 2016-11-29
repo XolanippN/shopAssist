@@ -36,14 +36,16 @@
             <!--<a class="button button-clear button-large" href="#/sign-up-name">
                 Continue
             </a>-->
-            <div style="height: 18px"></div>
-            <p ng-hide="{{isPrivate}}" class="donthavelabel">Don't have an account?</p>
-             <div style="height: 30px"></div>
-             <a href="#/sign-up" class="dlink" >Create one here</a> 
-              <!-- 
-              <button class="button button-block button-positive icon-left ion-social-facebook" style="background: #4c66a4;" ng-click="social($event,'facebook')">Login with Facebook</button>
-              <button class="button button-block button-positive icon-left ion-social-google" style="background: #d34836;" ng-click="social($event,'google')">Login with Google</button>
-               -->
+            <p ng-hide="{{isPrivate}}" class="donthavelabel">Don't have an account?
+                <a class="loginlink" href="#/sign-up">Create one here</a></p>
+                 <p ng-hide="{{isPrivate}}" class="donthavelabel">or</p>
+                <div style="margin:5%;"></div>
+              <button class="button button-block button-positive icon-left ion-social-facebook" 
+                style=" background:rgb(253,132,38);margin:0%;margin-top:3%;border-color: white;" 
+                ng-click="social($event,'facebook')">Login with Facebook</button>
+     <!--<button class="button button-block button-positive icon-left ion-social-google"
+     style="background: #d34836;" ng-click="social($event,'google')">Login with Google</button>-->
+  
         </form>
     </ion-content>
 </ion-view>

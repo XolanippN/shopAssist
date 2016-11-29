@@ -23,11 +23,18 @@ angular.module('starter.services',[])
     }
 
 })
-.factory('Activities',function(){
+.factory('Activities',function(LocalStorageService){
   var chosenItems = [];
   var mod = 0;
   var itemhere;
+  var callday = LocalStorageService.getCacheValue('callday')
+  var callweek = LocalStorageService.getCacheValue('callweek')
+  var callmonth = LocalStorageService.getCacheValue('callmonth')
+  var count = LocalStorageService.getCacheValue('count') 
   return{
+    callday:callday,
+    callweek:callweek,
+    callmonth:callmonth,
     chosenItems:chosenItems,
     mod:mod,
     itemhere:itemhere,
@@ -56,60 +63,72 @@ angular.module('starter.services',[])
         getData: getData
     };
 })
-.factory('periodListner',function(User,Database,LocalStorageService){
+.factory('periodListner',function($timeout,User,Database,LocalStorageService,Activities){
     // looking for change
+
+
 var dailyItems = LocalStorageService.getCacheArray('daily');
-var currentDay = LocalStorageService.getCacheArray("day");
+var currentDay = LocalStorageService.getCacheValue("day");
    // add looking for 7
 var weeklyItems = LocalStorageService.getCacheArray('weekly');
-   // add monthly, looking for change
+var currentWeek = LocalStorageService.getCacheValue("week");
 var monthlyItems = LocalStorageService.getCacheArray('monthly');
-var currentMonth = LocalStorageService.getCacheArray('month');
-
+var currentMonth = LocalStorageService.getCacheValue('month');
  function addPeriodItems(){
-   
     var a = new Date(Date.now()); 
     var dat = a.getDate();
    
-    
-     if(dat !== parseInt(currentDay.join(""))){
+     console.log(dat,"DAY",parseInt(currentDay))
+     if(dat !== parseInt(currentDay)){LocalStorageService.setCacheValue("callday", false)}
+     if(dat !== parseInt(currentDay) && Activities.callday == false){
+         LocalStorageService.setCacheValue("day",dat)
+         LocalStorageService.setCacheValue("callday", true)
          for(item in dailyItems){
-             console.log( dailyItems[item])
+               console.log(dailyItems)
+            if(Activities.callday == false){
+               console.log("this day adder is called")
             Database.ref_users.child(User.getMyuid()).child('Items').push({
                      'Name': dailyItems[item].Name,
                      'Quantity': dailyItems[item].Quantity,
                      'Shop':"",// $scope.data.shop,
                    });
-         }
-     LocalStorageService.setCacheValue("day",String(dat))
+             }
+         }   
+      
       }
+
     var dayOfWeek = a.getDay();
-    console.log(dayOfWeek)
-    if(dayOfWeek == 0){
+    console.log(dayOfWeek,"week")
+    if(dayOfWeek == 1 && dayOfWeek !== parseInt(currentWeek)){LocalStorageService.setCacheValue("callweek", false)}
+    if(dayOfWeek == 1 && Activities.callweek== false){
         for(item in weeklyItems){
+        LocalStorageService.setCacheValue("callweek", true)
         Database.ref_users.child(User.getMyuid()).child('Items').push({
-                     'Name': dailyItems[item].Name,
-                     'Quantity': dailyItems[item].Quantity,
+                     'Name': weeklyItems[item].Name,
+                     'Quantity': weeklyItems[item].Quantity,
                      'Shop':"",// $scope.data.shop,
                    }); 
         }
-        
+         LocalStorageService.setCacheValue("week", dayOfWeek)
     }
     var month = a.getMonth();
-    console.log( month,parseInt(currentMonth.join("")))
-    if(month !== parseInt(currentMonth.join(""))){
+    console.log( month,"month",parseInt(currentMonth))
+    if(dat !== parseInt(currentDay)){LocalStorageService.setCacheValue("callmonth", false)}
+    if(month !== parseInt(currentMonth)  && Activities.callmonth == false){
          for(item in monthlyItems){
+            LocalStorageService.setCacheValue("callmonth", false)
             Database.ref_users.child(User.getMyuid()).child('Items').push({
-                     'Name': dailyItems[item].Name,
-                     'Quantity': dailyItems[item].Quantity,
+                     'Name': monthlyItems[item].Name,
+                     'Quantity': monthlyItems[item].Quantity,
                      'Shop':"",// $scope.data.shop,
              });
+         LocalStorageService.setCacheValue('month',month)
          }
         
       }
-       LocalStorageService.setCacheValue('month', month)
+      
+     
 }
-
 
  return{
      dailyItems:dailyItems,
@@ -125,8 +144,7 @@ var currentMonth = LocalStorageService.getCacheArray('month');
      listenToItems = function(callback){
          Database.ref_users.child(User.getMyuid()).child('Items').on('value', function(snapshot) {
          console.log("listener fired");
-          items = snapshot.val();
-         
+          items = snapshot.val();       
           for(obj in items){
               var temp = false;
             for(name in searchNames){
@@ -166,8 +184,6 @@ var currentMonth = LocalStorageService.getCacheArray('month');
    }
 })
 
-
-
 .factory('User', function (Database,$timeout, $q,$rootScope,LocalStorageService) {
     
     var me = LocalStorageService.getCacheObject("me");
@@ -180,7 +196,6 @@ var currentMonth = LocalStorageService.getCacheArray('month');
             email: me.email
         });
     }
-
     return {
         getMyuid: function () {
             if (me) {
@@ -247,36 +262,24 @@ var currentMonth = LocalStorageService.getCacheArray('month');
             // return deff.promise
             
           },
-          loginSocial: function(network){
-              console.log(network)
-              if(network  == "google"){
-              var provider = new firebase.auth.GoogleAuthProvider();
-              }
-              else{
-                  var provider = new firebase.auth.FacebookAuthProvider();
-              }
-                if (me)
-                return Promise.resolve(me);
-                 var deff = $q.defer();
-                 isLoading = true;
-                return firebase.auth().signInWithPopup(provider).then(function(result) {
-                if (result.credential) {
-                    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-                    var token = result.credential.accessToken;
-                    // ...
-                }
-                  // The signed-in user info.
-                    var user = result.user;
-                   addUserToFirebaseUsers(user);
-                      me = user;
-                 return Promise.resolve(user)
-                }).catch(function(error) {
-                   console.log(error.message)
-                return Promise.resolve(error);
-                // ...
-                });
-            },
-           
+          loginSocial: function(credential){
+            if (me)
+            return Promise.resolve(me);
+            var deff = $q.defer();
+            isLoading = true;
+            console.log("into")
+            isLoading = true;
+             return firebase.auth().signInWithCredential(credential).then(function(results) {
+                        console.log(user)
+                        var user = result.user;
+                        addUserToFirebaseUsers(user);
+                        me = user;
+                        return Promise.resolve(user)
+                    }).catch(function(error) {
+                    console.log(error.message)
+                    return Promise.resolve(error);
+                    });  
+             },
         logout: function(email,password){
             firebase.auth().signOut().then(function() {
             console.log("Sign-out successful")

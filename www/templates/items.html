@@ -10,9 +10,9 @@
                           <h2 class="smalltextpic">Add New Items</h2>
                       </div>
                   </div >
-                  <ion-item  style="margin-bottom:5px;box-shadow: 0px 0.4px 0px 0 gray !important;border: none;" 
+                  <ion-item  style="margin-bottom:5px;box-shadow: 0px 0.6px 0px 0 gray !important;border: none;" 
                   class="item item-text-wrap" ng-repeat="(key,item) in items track by item.uid"
-                         ng-click="showFooter(items,item,key)" >
+                         ng-click="showFooter(items,item,key, $index)"ng-class="{'itemb':item.clicked}" >
                      <div ng-class="{'.pending-delete': clicked }">
                          <ion-option-button side="right" class="button-assertive" ng-click="remove(item.uid)">
                           Delete
@@ -24,9 +24,9 @@
                                      </div>
                                      <div style="padding-top:9px; margin-left:0px;" class= "col-80">
                                          <span  ng-if= "!item.checked && !item.clicked" style="font-size:120%;"  class="itemname"> {{item.Name}} </span> 
-                                         <span  ng-if= "item.checked && !item.clicked" style="font-size:120%;"  class="itemname"><strike>{{item.Name}}</strike></span>
-                                         <span  ng-if= "!item.checked && item.clicked" style="font-size:120%;color:green;"  class="itemname"> {{item.Name}} </span> 
-                                         <span  ng-if= "item.checked && item.clicked" style="font-size:120%;color:green"  class="itemname"><strike>{{item.Name}}</strike></span>
+                                         <span  ng-if= "item.checked && !item.clicked"  style="font-size:120%;"  class="itemname"><strike>{{item.Name}}</strike></span>
+                                         <span  ng-if= "!item.checked && item.clicked"  style="font-size:120%" class="itemname"> {{item.Name}} </span> 
+                                         <span  ng-if= "item.checked && item.clicked"   style="font-size:120%;"  class="itemname"><strike>{{item.Name}}</strike></span>
                                       </div>
                                         <div class ="col"  class="col-50here">
                                             <label class="checkbox checkbox-balanced" class="check">
@@ -34,28 +34,44 @@
                                             </label>
                                         </div>
                                      </div>
-                      </div>
+                                     <span Style="color:rgba(85,85,85,0.35);font-size: 70%;position: absolute;bottom: -2%" ng-if="item.Shop!==''">Buy at:  {{item.Shop}}</span>
+                       </div>
                </ion-item>
           </ion-list> 
        </ion-content> 
-           <ion-footer-bar ng-if="show" align-title="left" style=" rgba(24,24,24,0.2) 0px 0.1px 0.11px 0.56px !important;">
+          
+ <ion-footer-bar ng-if="show" style="min-height: 44px;height: auto;
+ rgba(24,24,24,0.2) 0px 0.1px 0.11px 0.56px !important;" 
+ class="bar-light chat-bar" keyboard-attach class="bar-assertive">
+     <form name="theform"style="position:relative;width:100%;">
             <div class="row">
-                <div class="col-offset-10"></div>
+                <div style="margin-left:10%;"></div>
                 <div class="col">
                      <i style="color:green;font-size:130%;" class="ion-checkmark"  ng-click="buyNow()"></i>
                 </div>
                  <div class="col">
-                     <i  style="color:orange;font-size:130%;" class="ion-calendar"  ng-click="openModal()"></i>
+                     <i style="color:orange;font-size:130%;" class="ion-calendar"  ng-click="openModal()"></i>
                 </div>
                  <div class="col">
-                     <i style="color:blue;font-size:130%;" class="ion-plus"  ng-click="AddAttribute()"></i>
+                     <i style="font-size:145%;" class="ion-ios-home"  ng-click="AddAttribute()"></i>
                 </div>
                  <div class="col">
-                     <i style="color:red;font-size:130%;" class="ion-close" ng-click="closeFooter()"></i>
+                     <i style="color:red;font-size:150%;" class="ion-android-exit" ng-click="closeFooter(items)"></i>
                 </div>
-                
+            </div>
+            <div class="row" ng-if="addshopname">
+              <div class="col-75 col">
+                  <textarea  style="width:100%; font-size:110%;padding: 0.5% 0.5% 0.5% 1%; margin-left: 10px;
+                   max-height:70px !important;line-height: 1.5em;
+                   resize: none; border: none;border-radius: 5px; margin-right: 10px;
+                   height:27px;-webkit-appearance: none;"placeholder="Enter shop to buy items in." ng-model="shopName"></textarea>
              </div>
-           </ion-footer-bar>
-           
+              <div class="col" style="padding-right:50px">
+                <i style="font-size:30px;color:rgb(253,132,38);margin-left:38px;"
+                    type="button" class="icon ion-android-send" class="col button"ng-click="addShopName(items,shopName)"></i>
+             </div>
+          </div>
+          </form>
+           </ion-footer-bar> 
    </ion-view>
 
