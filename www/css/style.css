@@ -25,6 +25,9 @@ background-color: white!important;
 .popup-buttons .button:last-child {
     background-color:green;
 }
+.popup-buttons .button:only-child {
+   margin-left:31%;
+}
 .quantitiySize{
    width:15%;
    margin-left: 20%;
@@ -110,6 +113,11 @@ margin-top:0%;
   color: white;
  font-family: Tahoma, sans-serif, sans-serif,Helvetica,Arial, sans-serif;
   font-size:150%;
+}
+.popup-sub-title{
+   color: white;
+ font-family: Tahoma, sans-serif, sans-serif,Helvetica,Arial, sans-serif;
+  font-size:140%;
 }
 .popup-body{
   color: white;
@@ -353,6 +361,7 @@ input:-ms-input-placeholder { /* IE10+ *//*
 }
 .bar.bar-royal{
   background-color:rgb(253,132,38);
+   border-color: transparent!important;
 };
 
 .donthavelabel{
