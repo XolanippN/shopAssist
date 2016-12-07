@@ -746,50 +746,39 @@ $scope.data.products = itemListner.searchNames;
     
 }})
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-.controller('historyCtrl', function( $window,$ionicLoading,User,$scope,$timeout,Database,itemHistoryListner,LocalStorageService) {
-    if(typeof window.ga !== 'undefined') { window.ga.trackView("history View"); }
+.controller('historyCtrl', function( $state,$window,$ionicLoading,User,$scope,$timeout,Database,itemHistoryListner,LocalStorageService) {
+    if(typeof $window.ga !== 'undefined') { $window.ga.trackView("history View"); }
 var x = false;
  // $scope.openDatePicker = itemHistoryListner.picker;
 $scope.chosenDateChange = function(){
 if(typeof window.ga !== 'undefined'){window.ga.trackEvent("Date", "changed history view"); }
- x=true;
+    x=true;
     console.log(x);
        console.log("Adding listen p");
       itemHistoryListner.picker(function (date,dateHistory){
         console.log(date)
-        $timeout(function (){
         if(dateHistory == undefined || dateHistory == null){
          var temp={"":''}
              $ionicLoading.show({template:'No items were purchased on this date'});
                  $timeout(function (){
-                     $ionicLoading.hide();
-                   itemHistoryListner.listenToItemsHistory(function (dateHistory){
-                          $ionicLoading.hide();
-                    $timeout(function (){
-                    var temp = { "": ""}
-                    $scope.$apply(function(){
-                    console.log("Applying in history callback");
-                    if(dateHistory == null){
-                    $scope.dates = temp;
-                    console.log("history empty")
-        }
-        else{
-            $scope.dates = dateHistory;
-          }
-          })},0,false);
-       });
+                    $ionicLoading.hide();
+                    callHistory()
                     },1500);
         }else{
         var temp = {[date]:dateHistory}
         console.log(temp)
         }
-$scope.$apply(function(){
-        console.log("Applying in history callback");
-            $scope.dates = temp;   
+      $timeout(function (){
+        $scope.$apply(function(){
+        console.log("Applying in history callback2");
+            $scope.dates = temp; 
+             x = false  
           })},0,false);
-       });
+    });
+     // x = false;
  }
-
+ callHistory();
+function callHistory(){
 if(x==false){
  var currentHistory = {}
   console.log("Adding listen c");
@@ -798,7 +787,7 @@ if(x==false){
         $timeout(function (){
         var temp = { "": ""}
         $scope.$apply(function(){
-        console.log("Applying in history callback");
+        console.log("Applying in history callback c");
         if(dateHistory == null){
            $scope.dates = temp;
            console.log("history empty")
@@ -817,7 +806,7 @@ if(x==false){
               console.log("here")
         $timeout(function (){
         $scope.$apply(function(){
-        console.log("Applying in history callback");
+        console.log("Applying in history load more callback");
         console.log(dateHistory)
         if(dateHistory == null){
           $scope.hasMoreData=false;
@@ -842,7 +831,8 @@ if(x==false){
           })},0,false);
        });
 	};
-     }   
+ }
+}
 })
 
 .controller('itemCtrl', function( $timeout,$scope,Database,UserLocalStorageService,$ionicHistory) {
