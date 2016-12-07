@@ -5,7 +5,7 @@ a.item-content.activated{
 background-color: white!important;
 }
 .item{
-  overflow:inherit;
+  overflow:visible;
 }
 .loginlink{
  border:none!important;
@@ -21,7 +21,6 @@ background-color: white!important;
 }
 .itemb {
   background-color: gainsboro!important;
- box-shadow: gray 0px 0.6px 0px 0px !important;
 }
 .item-complex .item-content{
    padding: 6px 6px 6px 4px;
