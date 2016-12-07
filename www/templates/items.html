@@ -1,18 +1,22 @@
 
  <ion-view view-title="Shop Assist" ng-click="untickItems(items)">
+     <!--<ion-nav-buttons side="right">
+        <button class="button button-icon button-clear ion-ios-list-outline"ng-click="chosenDate=true;chosenDateChange()">
+        </button>
+      </ion-nav-buttons>-->
     <ion-floating-button ng-if="!show" click="addItem()" has-footer="false"button-color="rgb(253,132,38)" icon="ion-plus" icon-color="#fff">
     </ion-floating-button>
        <ion-content class="has-footer">
           <ion-list class="itemcontent"> 
                  <div class="background" ng-if="!items.length"> 
                     <div class="backgroundpici" ng-if="!items.length">
-                          <i class="ion-bag"></i>
-                          <h2 class="smalltextpic">Add New Items</h2>
+                          <i class="ion-ios-cart-outline"></i>
+                          <h2 class="smalltextpic">Hooray!! your cart is empty</h2>
                       </div>
                   </div >
-                  <ion-item  style="margin-bottom:5px;box-shadow: 0px 0.6px 0px 0 gray !important;border: none;" 
-                  class="item item-text-wrap" ng-repeat="(key,item) in items track by item.uid"
-                         ng-click="showFooter(items,item,key, $index)"ng-class="{'itemb':item.clicked}" >
+                 <!-- <ion-item  style="margin-bottom:5px;box-shadow:0px 0.6px 0px 0 gray!important;border: none;" 
+                   ng-repeat="(key,item) in items track by item.uid"
+                         ng-click="showFooter(items,item,key, $index);$event.preventDefault();$event.stopPropagation();"ng-class="{'itemb':item.clicked}" >
                      <div ng-class="{'.pending-delete': clicked }">
                          <ion-option-button side="right" class="button-assertive" ng-click="remove(item.uid)">
                           Delete
@@ -22,17 +26,52 @@
                                              <span  class="threetimes" style="font-size:120%;">{{item.Quantity}}</span>
                                              <span class="thex">&nbsp&nbspX</span>
                                      </div>
-                                     <div style="padding-top:9px; margin-left:0px;" class= "col">
+                                     <div style="padding-top:9px; margin-left:0px;overflow:hidden;white-space: nowrap;text-overflow: ellipsis;" class= "col">
                                          <span  ng-if= "!item.checked && !item.clicked" style="font-size:120%;"  class="itemname"> {{item.Name}} </span> 
                                          <span  ng-if= "item.checked && !item.clicked"  style="font-size:120%;"  class="itemname"><strike>{{item.Name}}</strike></span>
                                          <span  ng-if= "!item.checked && item.clicked"  style="font-size:120%" class="itemname"> {{item.Name}} </span> 
                                          <span  ng-if= "item.checked && item.clicked"   style="font-size:120%;"  class="itemname"><strike>{{item.Name}}</strike></span>
                                       </div>
-                                       <div class="col-10"style="margin-top:2%;">
+                                       <div class="col-10"style="margin-top:1.5%;">
                                            <img ng-if="item.Shop=='pnp'" ng-src="img/pnp.png" alt="PicknPay" style=";width:78%;height:85%;"ng-click="addShopName(items,'pnp')">
                                            <img ng-if="item.Shop=='shoprite'" ng-src="img/shoprite.png" alt="Shoprite" style="width:70%;height:auto;"ng-click="addShopName(items,'shoprite')">
-                                           <img ng-if="item.Shop=='spar'" ng-src="img/spar.gif" alt="Spar" style="width:70%;height:auto;"ng-click="addShopName(items,'spar')">
-                                           <img ng-if="item.Shop=='woolworths'" ng-src="img/woolworths.jpg" alt="woolworths" style="width:70%;height:auto;"ng-click="addShopName(items,'woolworths')">
+                                           <img ng-if="item.Shop=='spar'" ng-src="img/spar.png" alt="Spar" style="width:70%;height:auto;"ng-click="addShopName(items,'spar')">
+                                           <img ng-if="item.Shop=='woolworths'" ng-src="img/woolworths.png" alt="woolworths" style="width:70%;height:auto;"ng-click="addShopName(items,'woolworths')">
+                                      </div>
+                                        <div class ="col-10"  class="col-50here">
+                                            <label class="checkbox checkbox-balanced" class="check">
+                                                <input type="checkbox"  ng-click="clickItem(item,key); $event.stopPropagation();" ng-model="item.checked"></input>
+                                            </label>
+                                        </div>
+                                     </div>
+                            
+                       </div>
+               </ion-item>-->
+            <ion-item ng-repeat=" (keys,shop) in shops" style="background-color: transparent;border:none;"ng-show='shop.isshop'>
+                   <p ng-show='shop.isshop' ng-hide='!shop.isshop'>{{keys}}</p>
+                  <ion-item  style="margin-bottom:5px;box-shadow:0px 0.6px 0px 0 gray!important;border: none;" 
+                   ng-repeat="(key,item) in items track by key" ng-if="item.Shop == keys" 
+                         ng-click="showFooter(items,item,key,$index);$event.preventDefault();$event.stopPropagation();"ng-class="{'itemb':item.clicked}" >
+                     <div ng-class="{'.pending-delete': clicked }">
+                         <ion-option-button side="right" class="button-assertive" ng-click="remove(item.uid)">
+                          Delete
+                        </ion-option-button>
+                                   <div class="row">
+                                      <div class= "col-10"style="padding-top:9px;">
+                                             <span  class="threetimes" style="font-size:120%;">{{item.Quantity}}</span>
+                                             <span class="thex">&nbsp&nbspX</span>
+                                     </div>
+                                     <div style="padding-top:9px; margin-left:0px;overflow:hidden;white-space: nowrap;text-overflow: ellipsis;" class= "col">
+                                         <span  ng-if= "!item.checked && !item.clicked" style="font-size:120%;"  class="itemname"> {{item.Name}} </span> 
+                                         <span  ng-if= "item.checked && !item.clicked"  style="font-size:120%;"  class="itemname"><strike>{{item.Name}}</strike></span>
+                                         <span  ng-if= "!item.checked && item.clicked"  style="font-size:120%" class="itemname"> {{item.Name}} </span> 
+                                         <span  ng-if= "item.checked && item.clicked"   style="font-size:120%;"  class="itemname"><strike>{{item.Name}}</strike></span>
+                                      </div>
+                                       <div class="col-10"style="margin-top:1.5%;">
+                                           <img ng-if="item.Shop=='PicknPay'" ng-src="img/pnp.png" alt="PicknPay" style=";width:78%;height:85%;"ng-click="addShopName(items,'PicknPay')">
+                                           <img ng-if="item.Shop=='Shoprite'" ng-src="img/shoprite.png" alt="Shoprite" style="width:70%;height:auto;"ng-click="addShopName(items,'Shoprite')">
+                                           <img ng-if="item.Shop=='Spar'" ng-src="img/spar.png" alt="Spar" style="width:70%;height:auto;"ng-click="addShopName(items,'Spar')">
+                                           <img ng-if="item.Shop=='Woolworths'" ng-src="img/woolworths.png" alt="woolworths" style="width:70%;height:auto;"ng-click="addShopName(items,'Woolworths')">
                                       </div>
                                         <div class ="col-10"  class="col-50here">
                                             <label class="checkbox checkbox-balanced" class="check">
@@ -43,25 +82,26 @@
                             
                        </div>
                </ion-item>
+        </ion-item>
           </ion-list> 
        </ion-content> 
           
- <ion-footer-bar ng-if="show" style="min-height: 44px;height: auto;
+ <ion-footer-bar ng-show="show" style="min-height: 44px;height: auto;
  rgba(24,24,24,0.2) 0px 0.1px 0.11px 0.56px !important;" 
- class="bar-light chat-bar" keyboard-attach class="bar-assertive">
+ class="bar-light chat-bar"ng-click="$event.preventDefault();$event.stopPropagation()" keyboard-attach class="bar-assertive">
      <form name="theform"style="position:relative;width:100%;">
             <div class="row">
                 <div></div>
-                <div class="col"  style="margin-left:11%;">
+                <div class="col"  style="margin-left:11%;" ng-click="buyNow(items)">
                      <i style="color:green;font-size:130%;" class="ion-checkmark"  ng-click="buyNow(items)"></i>
                 </div>
-                 <div class="col">
+                 <div class="col" ng-click="openModal()">
                      <i style="color:orange;font-size:130%;" class="ion-calendar" ng-click="openModal()"></i>
                 </div>
-                 <div class="col">
+                 <div class="col" ng-click="openModal2()">
                      <i style="font-size:145%;" class="ion-ios-home"  ng-click="openModal2()"></i>
                 </div>
-                 <div class="col">
+                 <div class="col" ng-click="closeFooter(items)">
                      <i style="color:red;font-size:150%;" class="ion-android-exit" ng-click="closeFooter(items)"></i>
                 </div>
             </div>

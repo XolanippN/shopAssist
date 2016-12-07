@@ -3,7 +3,7 @@
         <div style="height: 50px"></div>
         <h1>Shop Assist</h1>
          <img ng-src="img/main.PNG" style="width:80px;height:auto;">
-        <div style="height: 45px"></div>
+        <div style="height: 18px"></div>
         <form name="loginForm" ng-submit="submit($event)">
         <ion-list class="border-none">
             <ion-item class="item-input border-bottom">
@@ -38,8 +38,9 @@
             </a>-->
             <p ng-hide="{{isPrivate}}" class="donthavelabel">Don't have an account?
                 <a class="loginlink" href="#/sign-up">Create one here</a></p>
+                <div style="margin:7%;"></div>
                  <p ng-hide="{{isPrivate}}" class="donthavelabel">or</p>
-                <div style="margin:5%;"></div>
+                <div style="margin:10%;"></div>
               <button class="button button-block button-positive icon-left ion-social-facebook" 
                 style=" background:rgb(253,132,38);margin:0%;margin-top:3%;border-color: white;" 
                 ng-click="social($event,'facebook')">Login with Facebook</button>

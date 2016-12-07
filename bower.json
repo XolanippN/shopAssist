@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "ion-autocomplete": "^0.3.3",
-    "ng-cordova-oauth": "^0.3.0"
+    "ng-cordova-oauth": "^0.3.0",
+    "ionic-datepicker": "^1.2.1"
   }
 }

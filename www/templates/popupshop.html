@@ -1,36 +1,45 @@
- <ion-modal-view style="background-color:rgb(255,255,255);">
-    <ion-content>
-         <div>
-             <h1 style="color:black;font-famil;font-family: 'Work Sans', sans-serif;
-                         font-family: 'Raleway', sans-serif;
-                         font-family: 'Dosis', sans-serif;
-                         font-family: 'Catamaran', sans-serif;
-                         text-align:center;
-                         margin-top:20%;"
-                         >Select Shop</h1>
-         </div>
-        <div class="row"style="margin-left:5%;margin-top:20%;">
-                <div class="col">
-                     <img src="../img/pnp.png" alt="PicknPay" style="width:90%;height:auto;"ng-click="addShopName(items,'pnp')">
-                </div>
-                 <div class="col"style="margin-left:4%;">
-                     <img src="../img/shoprite.png" alt="Shoprite" style="width:60%;height:auto;"ng-click="addShopName(items,'shoprite')">
-                </div>
-                 <div class="col">
-                     <img src="../img/spar.gif" alt="Spar" style="width:60%;height:auto;"ng-click="addShopName(items,'spar')">
-                </div>
-                 <div class="col">
-                    <img src="../img/woolworths.jpg" alt="woolworths" style="width:60%;height:auto;"ng-click="addShopName(items,'woolworths')">
-                </div>
-           </div>
-             <p ng-click="closeModal2()" 
-                  style="color:black;font-famil;font-family: 'Work Sans', sans-serif;
-                         font-family: 'Raleway', sans-serif;
-                         font-family: 'Dosis', sans-serif;
-                         font-family: 'Catamaran', sans-serif;
-                         text-align:center;
-                         text-decoration:underline;
-                         font-size:150%;
-                         margin-top:20%;">Cancel</p>
+ <ion-modal-view style="background-color:rgba(255, 165,0,0.9);">
+       <ion-header-bar style="padding-top:6%;padding-bottom:6%;
+                               border: 0px !important;
+                               border-bottom-color: transparent !important;
+                               background-image: none !important;
+                               border-bottom: none !important;
+                               background-color:transparent;
+                               ">
+
+           <!-- <div class="col">
+                <span style="color:black;text-align:center;font-size:120%;margin-left:40%;">Select Shop<span>
+            </div>-->
+            <div Style="padding-left:90%;">
+            <i ng-click="closeModal2()" class="ion-close-round" Style="padding-left:90%;font-size:200%;color:white;"></i>
+            </div>
+  
+       </ion-header-bar> 
+    <ion-content style="background-color:transparent;">
+        <ion-item style="background-color:transparent;border:none;margin:auto;padding:1%"ng-repeat="picture in pictures">
+            <span style="margin-left:5%"></span>
+                  <div class="row"ng-if="picture == 0"ng-click="addShopName(items,'PicknPay')">
+                      <div class="col">
+                     <img src="img/pnp.png" ng-if="picture == 0" alt="PicknPay" style="border-radius:100%;width:35%;height:auto;"ng-click="addShopName(items,'PicknPay')">
+                      </div>
+                       <div class="col" style="padding-top:7%"><span style="margin-bottom:10%;color:white;margin-left:-45%;font-size: 155%;" ng-if="picture == 0">Pick and Pay</span>
+                     </div>
+                  </div>
+                  <div class="row"ng-if="picture == 1" ng-click="addShopName(items,'Shoprite')">
+                      <div class="col"><img src="img/shoprite.png" ng-if="picture == 1" alt="Shoprite" 
+                     style="border-radius:100%;width:35%;height:auto;"ng-click="addShopName(items,'Shoprite')"></div>
+                         <div class="col" style="padding-top:7%"><span style="margin-bottom:10%;color:white;margin-left:-45%;font-size: 155%;" ng-if="picture == 1">Shoprite</span></div>
+                     </div>
+                      <div class="row" ng-if="picture == 2" ng-click="addShopName(items,'Spar')">
+                      <div class="col"><img src="img/spar.png" ng-if="picture == 2" alt="Spar"
+                      style="border-radius:100%;width:35%;height:auto;"ng-click="addShopName(items,'Spar')"></div>
+                         <div class="col" style="padding-top:7%"><span style="margin-bottom:10%;color:white;margin-left:-45%;font-size: 155%;" ng-if="picture == 2">Spar</span></div>
+                      </div>
+                      <div class="row"ng-if="picture == 3" ng-click="addShopName(items,'Woolworths')">
+                      <div class="col"><img src="img/woolworths.png"ng-if="picture == 3" alt="Woolworths" 
+                     style="border-radius:100%;width:35%;height:auto;"ng-click="addShopName(items,'Woolworths')"></div>
+                        <div class="col"style="padding-top:7%"> <span style="margin-bottom:10%;color:white;margin-left:-45%;font-size: 155%;" ng-if="picture == 3">Woolworths</span></div>
+                    </div>
+            </ion-item>
     </ion-content>
   </ion-modal-view>

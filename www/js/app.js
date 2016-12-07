@@ -4,12 +4,19 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ngCordovaOauth','ionic', 'starter.controllers', 'starter.services','ngCordova','autocomplete','ion-floating-menu'])
+angular.module('starter', ['ngCordovaOauth','ionic','ionic-datepicker', 'starter.controllers',
+                           'starter.services','ngCordova','autocomplete','ion-floating-menu'])
 
 .run(function($ionicPlatform,$rootScope, User, $location) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
+     if(typeof window.ga !== 'undefined') {
+               window.ga.startTrackerWithId('UA-88581508-1');
+               window.ga.gatrackView('Init');
+            } else {
+                console.log("Google Analytics Unavailable");
+            }
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);

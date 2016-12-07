@@ -1,12 +1,22 @@
 
-              <div >
-                  <div class="row"style=";margin-left:10%;width:90%;">
-                        <div class="col-20" style="padding:1px;">
-                            <input style="padding-top:9%;" type="number" ng-model="data.quantity"  class="popupinput" placeholder="1 X"  name="quantity"/>
-                        </div>
-                          <div class="col-70">
-                            <autocomplete ng-model="data.name" attr-placeholder="Enter Item Name"  name="name" click-activation="true" 
-                            data ="data.products" class="popupinput"></autocomplete>
+               <div>
+                   <div class="row" style="padding-bottom:2.1%;"ng-click="up()">
+                  <i style="color:white;font-size:150%;margin-left:3.4%;width:90%;" class="ion-arrow-up-b"></i>
+                   </div>
+                  <div class="row"style="margin-left:3%;width:90%;">
+                         <div class="col-20" style="padding:1px;">
+                            <input style="" type="number" ng-model="data.quantity"  class="popupinput" placeholder="1 X"  name="quantity"/>
+
                          </div>
+                          <div class="col-70">
+                               <form ng-submit="addSubmit()">
+                            <autocomplete ng-model="data.name" attr-placeholder="Enter Item Name"  name="name" click-activation="true" 
+                            data ="data.products" class="popupinput" type="submit"></autocomplete>
+                         </div>
+                         </form>
+                  </div>
+                   <div class="row"  style="padding-top:2.2%;"ng-click="down()">
+                   <i style="color:white;font-size:150%;margin-left:3.4%;width:90%;" class="ion-arrow-down-b"></i>
                   </div>
              </div>
+      

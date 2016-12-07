@@ -6,16 +6,16 @@
 }
 
 .autocomplete input{
-  font-size: 1.2em;
   width: 100%;
-  padding:0.4em;
-  margin-top:1%;
+  overflow:hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .autocomplete ul{
   position: absolute;
   left: 0;
-  font-size:135%;
+  font-size:140%;
   width: 100%;
   z-index: 2;
 }
@@ -30,14 +30,14 @@
 
 .autocomplete li.active{
   width: 100%;
-  background-color: #4bf;
+  background-color: rgba(24,24,24,0.2);
 }
 
 .autocomplete .highlight {
-  background-color: #E2E2E2;
+  background-color: transparent;
 }
 
 .autocomplete li.active .highlight {
   background: #666;
-  color: #fff;
+  color: transparent;
 }

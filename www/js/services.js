@@ -90,7 +90,7 @@ var currentMonth = LocalStorageService.getCacheValue('month');
             Database.ref_users.child(User.getMyuid()).child('Items').push({
                      'Name': dailyItems[item].Name,
                      'Quantity': dailyItems[item].Quantity,
-                     'Shop':"",// $scope.data.shop,
+                     'Shop':"Unclassified",// $scope.data.shop,
                    });
              }
          }   
@@ -106,7 +106,7 @@ var currentMonth = LocalStorageService.getCacheValue('month');
         Database.ref_users.child(User.getMyuid()).child('Items').push({
                      'Name': weeklyItems[item].Name,
                      'Quantity': weeklyItems[item].Quantity,
-                     'Shop':"",// $scope.data.shop,
+                     'Shop':"Unclassified",// $scope.data.shop,
                    }); 
         }
          LocalStorageService.setCacheValue("week", dayOfWeek)
@@ -120,7 +120,7 @@ var currentMonth = LocalStorageService.getCacheValue('month');
             Database.ref_users.child(User.getMyuid()).child('Items').push({
                      'Name': monthlyItems[item].Name,
                      'Quantity': monthlyItems[item].Quantity,
-                     'Shop':"",// $scope.data.shop,
+                     'Shop':"Unclassified",// $scope.data.shop,
              });
          LocalStorageService.setCacheValue('month',month)
          }
@@ -139,7 +139,6 @@ var currentMonth = LocalStorageService.getCacheValue('month');
 
 })
 .factory('itemListner',function( $timeout,User,Database,LocalStorageService){
- var items = LocalStorageService.getCacheArray(Database.ref_users.child(User.getMyuid()).child('Items').toString());
  var searchNames = LocalStorageService.getCacheArray("names");
      listenToItems = function(callback){
          Database.ref_users.child(User.getMyuid()).child('Items').on('value', function(snapshot) {
@@ -164,23 +163,109 @@ var currentMonth = LocalStorageService.getCacheValue('month');
      } 
    return{
      listenToItems:listenToItems,
-     searchNames:searchNames
+     searchNames:searchNames,
    }
 })
 
-.factory('itemHistoryListner',function(Database,User,LocalStorageService){
+.factory('itemHistoryListner',function(ionicDatePicker,$ionicLoading,Database,User,LocalStorageService){
        //i want to fire this only if cache is not empty
-  var history = LocalStorageService.getCacheArray(Database.ref_users.child(User.getMyuid()).child('Items_History').toString());
-        listenToItemsHistory = function(callback){
-            Database.ref_users.child(User.getMyuid()).child('Items_History').on('value', function(snapshot) {
-           console.log("listener fired");
-           history = snapshot.val()
-           LocalStorageService.setCacheValue(Database.ref_users.child(User.getMyuid()).child('Items_History').toString(),history)
-           callback(history)
+       function timeConverter(UNIX_timestamp,header,more){
+            var a = new Date(UNIX_timestamp);
+            var year = a.getFullYear();
+            var month = a.getMonth();
+            var date = a.getDate();
+            var hour = a.getHours();
+            var min = a.getMinutes();
+            var sec = a.getSeconds();
+
+            var months= ['January','February','March','April','May','June','July','August',
+                         'september','October','November','December']
+            var time = date + ' ' + months[month] + ' ' + year ;
+            var headerMonth = months[month] + ' ' + year;
+            if(month == 0){
+                month =12;
+                year=year-1;
+            }
+            var headerMoreMonth = months[month-1] + ' ' + year;
+            // + ' ' + hour + ':' + min + ':' + sec
+            if(header&&!more){
+               return headerMonth;  
+            }
+            else if(!header && !more){
+                 return time;
+            }
+            else if(!header && more){
+               return timeMore;  
+            }
+            else{
+                 return headerMoreMonth;
+            }
+
+
+        }
+picker = function(callback){
+    var chosenDate = {
+                callback: function (val) {  //Mandatory
+                console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+                            Database.ref_users.child(User.getMyuid()).child('Items_History')
+                            .child(timeConverter(val,true))
+                            //.child(timeConverter(val,false))
+                            .on('value', function(snapshot){
+                              console.log("listener fired");
+                              historyitems = snapshot.val()
+                              if(historyitems == null){
+                                callback(t,historyitems)
+                              }else{
+                              var t = timeConverter(val,false,false);
+                               callback(t,historyitems[t])
+                              }
+                             });
+    
+                },
+
+                from: new Date(2016, 10, 1), //Optional
+                to: new Date(Date.now()),     //Optional
+                inputDate: new Date(),        //Optional
+                mondayFirst: true,            //Optional
+                closeOnSelect: true,          //Optional
+                templateType: 'model'         //Optional
+            };
+            openDatePicker();
+   function openDatePicker(){
+            console.log("called")
+            ionicDatePicker.openDatePicker(chosenDate);
+        };
+
+}
+  
+
+
+
+
+  listenToItemsHistory = function(callback){
+      $ionicLoading.show({template:'loading....'});
+      Database.ref_users.child(User.getMyuid()).child('Items_History').child(timeConverter(Date.now(),true,false))
+      .on('value', function(snapshot) {
+                console.log("listener fired");
+                historyitems = snapshot.val()
+                callback(historyitems)
          });
+         
+       }//send in timestamp here
+  listenToMoreItemsHistory = function(callback){
+      Database.ref_users.child(User.getMyuid()).child('Items_History').child(timeConverter(Date.now(),true,true))
+      .on('value', function(snapshot) {
+                console.log("listener fired");
+                historyitems = snapshot.val()
+                callback(historyitems)
+         });
+         
        }
    return{
-       listenToItemsHistory:listenToItemsHistory
+       listenToMoreItemsHistory:listenToMoreItemsHistory,
+       listenToItemsHistory:listenToItemsHistory,
+       timeConverter:timeConverter,
+       picker:picker
    }
 })
 
@@ -234,6 +319,11 @@ var currentMonth = LocalStorageService.getCacheValue('month');
 
         clearMe: function () {
             me = null;
+        },
+        checkUser: function(callback){
+            firebase.auth().onAuthStateChanged(function(user) {
+                callback(user)
+                });
         },
 
         login: function (email, password) {
@@ -376,8 +466,8 @@ var currentMonth = LocalStorageService.getCacheValue('month');
      localStorage.clear();
      document.location.href = 'index.html';
     }
-}]);
-/*.factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork){
+}])
+.factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork){
  
   return {
     isOnline: function(){
@@ -418,5 +508,5 @@ var currentMonth = LocalStorageService.getCacheValue('month');
         }       
     }
   }
-});*/
+});
 
