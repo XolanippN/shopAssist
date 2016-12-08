@@ -613,7 +613,7 @@ $timeout(function (){
                   $rootScope,$timeout, $ionicPopup,$ionicListDelegate, Database, itemListner,User){
     if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User scanning item from menu tab"); }
 $scope.scanItem = function(){
-if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "scanning item"); }
+if(typeof window.ga !== 'undefined'){ window.ga.trackEvent("Scan", "scanning item"); }
 $scope.data = {};
 $scope.data.products = itemListner.searchNames;
  $scope.data.quantity = 1;
@@ -735,9 +735,10 @@ $scope.data.products = itemListner.searchNames;
                                                     'Name': $scope.data.name,
                                                     'Quantity': $scope.data.quantity,
                                                     'Shop':"Other",// $scope.data.shop,
-                                                            });
-                               }    
-                           });        
+                                                     });
+                               }       
+                           });
+                           $state.go('app.items');        
                         }
 
                        }, function(error) {
@@ -767,7 +768,7 @@ if(typeof window.ga !== 'undefined'){window.ga.trackEvent("Date", "changed histo
         }else{
         var temp = {[date]:dateHistory}
         console.log(temp)
-        }
+      }
       $timeout(function (){
         $scope.$apply(function(){
         console.log("Applying in history callback2");
@@ -777,7 +778,7 @@ if(typeof window.ga !== 'undefined'){window.ga.trackEvent("Date", "changed histo
     });
      // x = false;
  }
- callHistory();
+callHistory();
 function callHistory(){
 if(x==false){
  var currentHistory = {}

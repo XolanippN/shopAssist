@@ -13,7 +13,7 @@ angular.module('starter', ['ngCordovaOauth','ionic','ionic-datepicker', 'starter
     // for form inputs)
      if(typeof window.ga !== 'undefined') {
                window.ga.startTrackerWithId('UA-88581508-1');
-               window.ga.gatrackView('Init');
+               window.ga.trackView('Init');
             } else {
                 console.log("Google Analytics Unavailable");
             }
@@ -74,6 +74,7 @@ angular.module('starter', ['ngCordovaOauth','ionic','ionic-datepicker', 'starter
       }
     }
   })
+
 
   .state('app.history', {
       url: '/history',
