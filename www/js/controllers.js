@@ -490,7 +490,7 @@ $timeout(function (){
         $scope.scanItem = function(){
              if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User tried to scan from pop button"); }
                       $cordovaBarcodeScanner.scan().then(function(imageData) {
-                      if(imageData.text){
+                      if(imageData.text !== '' && imageData.text){
                               $ionicLoading.show({template:'Scanning....'});
                               Scanner.getData(imageData.text,function(cb){
                               console.log(cb.data.barcodeName,"called back name")
@@ -560,11 +560,11 @@ $timeout(function (){
 .controller('scanCtrl', function( LocalStorageService,$ionicLoading, $cordovaBarcodeScanner,
                                   Scanner,$scope,$timeout,$ionicPopup,
                                   Database,itemListner,User) {
-     $scope.scanItem = function(){
+    $scope.scanItem = function(){
              if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User tried to scan from pop button"); }
                       $cordovaBarcodeScanner.scan().then(function(imageData) {
-                          console.log("scanned "+ imageData.text)
-                      if(imageData.text !== ''){
+                          console.log(typeof imageData.text)
+                      if(imageData.text !== '' && imageData.text){
                               $ionicLoading.show({template:'Scanning....'});
                               Scanner.getData(imageData.text,function(cb){
                               console.log(cb.data.barcodeName,"called back name")

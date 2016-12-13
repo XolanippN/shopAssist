@@ -29,8 +29,6 @@ angular.module('starter', ['ngCordovaOauth','ionic','ionic-datepicker', 'starter
 
   });
 })
-
-
 .config(function($stateProvider, $urlRouterProvider) {
  
   $stateProvider
