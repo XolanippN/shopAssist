@@ -4,17 +4,17 @@ angular.module('starter.controllers', ['ionic','ngCordova'])
 .controller('itemsCtrl', function(LocalStorageService,periodListner,$ionicModal,$ionicLoading, $cordovaBarcodeScanner,
                                   Scanner,Activities,$scope,$rootScope,$timeout, $ionicPopup,$ionicListDelegate,
                                   Database, $state,itemHistoryListner, itemListner,User){
-$scope.$on('$ionicView.beforeEnter', function() {
-    if(typeof window.ga !== 'undefined') { window.ga.trackView("itemsCtrl");console.log("it works");}
-});
 
+$scope.$on('$ionicView.beforeEnter', function() {
+    if(typeof window.ga !== 'undefined') { analytics.trackView("itemsCtrl");console.log("it works");}
+});
 
  periodListner.addPeriodItems();
  $scope.addshopname = false;
  $scope.show = false;
-     console.log("Adding listen");
-$scope.items = [];
-$scope.untickItems = function(items){
+ console.log("Adding listen");
+ $scope.items = [];
+ $scope.untickItems = function(items){
    for(item in items){
          if( items[item].clicked == true){
             items[item].clicked = false; 
@@ -41,7 +41,7 @@ $scope.closeModal2();
   // update from local storage
  //this scope must load from local
 var itemsz = LocalStorageService.getCacheArray(Database.ref_users.child(User.getMyuid()).child('Items').toString());
-        shops = {
+    shops = {
          Woolworths:{isshop:false}, 
          PicknPay:{isshop:false}, 
          Shoprite:{isshop:false}, 
@@ -57,7 +57,7 @@ var itemsz = LocalStorageService.getCacheArray(Database.ref_users.child(User.get
          }
       }
   }
-         $scope.shops = shops;
+    $scope.shops = shops;
          var tempItems = [];
             for(objects in itemsz) {
                tempItems.push({
@@ -72,7 +72,7 @@ var itemsz = LocalStorageService.getCacheArray(Database.ref_users.child(User.get
                $scope.items = tempItems;
                console.log(tempItems);
 
-itemListner.listenToItems(function (items){
+    itemListner.listenToItems(function (items){
 
   shops = {
           Woolworths:{isshop:false}, 
@@ -140,7 +140,7 @@ $scope.down = function(){
     text: 'SCAN',
     type: 'button-royal',
     onTap: function(e) {
-           
+           $scope.scanItem();
     }
   }, 
   {
@@ -183,7 +183,7 @@ $scope.down = function(){
 
 })
 $scope.addSubmit= function(){
-           if (!$scope.data.name ) {
+         if (!$scope.data.name ) {
              $ionicPopup.alert({
              title: 'Please enter item name!',
               buttons: [{
@@ -359,8 +359,8 @@ $scope.addSubmit= function(){
                     }
                  }
              LocalStorageService.setCacheValue("daily",periodListner.dailyItems)
-                       $scope.modal.remove();  
-                        $scope.show = false;
+             $scope.modal.remove();  
+             $scope.show = false;
                $ionicLoading.show({template:'Items Added to daily purchases'});
                 $timeout(function (){
                       $ionicLoading.hide();
@@ -487,11 +487,10 @@ $timeout(function (){
             } },3000,false);
         }
 
-        $rootScope.scanItem = function(){
+        $scope.scanItem = function(){
              if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User tried to scan from pop button"); }
                       $cordovaBarcodeScanner.scan().then(function(imageData) {
                       if(imageData.text){
-                                 
                               $ionicLoading.show({template:'Scanning....'});
                               Scanner.getData(imageData.text,function(cb){
                               console.log(cb.data.barcodeName,"called back name")
@@ -545,7 +544,80 @@ $timeout(function (){
                                                                 Database.ref_users.child(User.getMyuid()).child('Items').push({
                                                                 'Name': cb.data.barcodeName,
                                                                 'Quantity': 1,
+                                                                'Shop':"Other",
+                                                            });
+                               }    
+                           });        
+                        }
+                       }, function(error) {
+                        console.log("An error happened -> " + error);
+                   });
+        }
+  
+})
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+.controller('scanCtrl', function( LocalStorageService,$ionicLoading, $cordovaBarcodeScanner,
+                                  Scanner,$scope,$timeout,$ionicPopup,
+                                  Database,itemListner,User) {
+     $scope.scanItem = function(){
+             if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User tried to scan from pop button"); }
+                      $cordovaBarcodeScanner.scan().then(function(imageData) {
+                          console.log("scanned "+ imageData.text)
+                      if(imageData.text !== ''){
+                              $ionicLoading.show({template:'Scanning....'});
+                              Scanner.getData(imageData.text,function(cb){
+                              console.log(cb.data.barcodeName,"called back name")
+                              console.log(cb.data.newOrNot,"called back ans")
+
+                              if(cb.data.newOrNot == false){
+                                 if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User scanned and scraped product,recieved product name"); }
+                                   $ionicLoading.hide();                              
+                                   var myPopup2 = $ionicPopup.show({
+                                        title:  cb.data.barcodeName,
+                                        subTitle: 'Is this the correct name?',
+                                        buttons: [
+                                        { text: 'No',
+                                          type: 'button-assertive',
+                                          onTap: function(e) {  
+                                              if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User got incorrect product"); }                     
+                                                  Database.ref_itemCatalog.child("Wrongbarcodes").child(imageData.text).push({
+                                                      'Name': cb.data.barcodeName,
+                                                   });
+                                             myPopup2.close();
+                                             $ionicLoading.hide();
+                                             $scope.addItem();
+                                            }
+                                          },
+                                           {
+                                            text: '<b>Yes</b>',
+                                            type: 'button-royal',
+                                            onTap: function(e) {
+                                                 if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User scanned and recieved a correct product"); }
+                                                      Database.ref_itemCatalog.child("Rightbarcodes").child(imageData.text).push({
+                                                          'Name': cb.data.barcodeName,
+                                                      });
+                                                      myPopup2.close();
+                                                  $ionicLoading.hide();
+                                                  console.log("Pushing item");
+                                                                Database.ref_users.child(User.getMyuid()).child('Items').push({
+                                                                'Name': cb.data.barcodeName,
+                                                                'Quantity':1,
                                                                 'Shop':"Other",// $scope.data.shop,
+                                                            });
+                            
+                                        }
+                                         }]
+                                   })
+ //finish pop up two                         
+                               }else{
+                                    if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User scanned an known product in the db"); }
+                                    $ionicLoading.hide();
+                                                                console.log("Pushing item");
+                                                                Database.ref_users.child(User.getMyuid()).child('Items').push({
+                                                                'Name': cb.data.barcodeName,
+                                                                'Quantity': 1,
+                                                                'Shop':"Other",
                                                             });
                                }    
                            });        
@@ -555,10 +627,79 @@ $timeout(function (){
                         console.log("An error happened -> " + error);
                    });
         }
-  
-})
+$scope.addItem = function(){
+if(typeof window.ga !== 'undefined') {window.ga.trackEvent("Add Item", "User clicked on add item button"); }
+$scope.data = {};
+$scope.data.products = itemListner.searchNames;
+$scope.data.quantity = 1;
+$scope.up = function(){
+$scope.data.quantity++;
+}
+$scope.down = function(){
+    if($scope.data.quantity > 1){
+    $scope.data.quantity--;
+    }
+}
+ var myPopup = $ionicPopup.show({
+ title: 'Add New Item Manually', 
+ scope: $scope,
+  templateUrl: 'templates/pop_up.html', 
+  buttons: [
+      { 
+    text: 'CANCEL',
+    type: 'button-default',
+    onTap: function(e) {
+    }
+  }, 
+  { 
+    text: 'SCAN',
+    type: 'button-royal',
+    onTap: function(e) {
+           
+    }
+  }, 
+  {
+    text: 'ADD',
+    type: 'button-royal',
+    onTap: function(e) {
+         if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Add Item", "User added item manually"); }
+       if (!$scope.data.name ) {
+             e.preventDefault();
+             $ionicPopup.alert({
+             title: 'Please enter item name!',
+              buttons: [{
+                text:'Ok',
+                type: 'button-positive'
+            }]    
+            });
+          }
+          else if(!$scope.data.quantity){
+              e.preventDefault();
+              $ionicPopup.alert({
+             title: 'Please enter item quantity!', 
+                buttons: [{
+                text:'Ok',
+                type: 'button-positive'
+            }]    
+            });
+          }
+          else {
+                 console.log("Pushing item");
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    Database.ref_users.child(User.getMyuid()).child('Items').push({
+                    'Name': $scope.data.name,
+                    'Quantity': $scope.data.quantity,
+                    'Shop':"Other",// $scope.data.shop,
+                  });
+                  myPopup.close();
+                }
+    }
+  }]
+
+})
+}
+
+})
 .controller('historyCtrl', function( $state,$window,$ionicLoading,User,$scope,$timeout,Database,itemHistoryListner,LocalStorageService) {
     if(typeof $window.ga !== 'undefined') { $window.ga.trackView("history View"); }
 var x = false;
@@ -648,9 +789,6 @@ if(x==false){
 }
 })
 
-.controller('itemCtrl', function( $timeout,$scope,Database,UserLocalStorageService,$ionicHistory) {
-
-})
 .controller('logoutCtrl', function( Activities,Database,User,$timeout,$scope,$ionicHistory,$state,LocalStorageService,$ionicLoading) {
     $scope.logout = function(){
      $ionicLoading.show({template:'Logging out....'});

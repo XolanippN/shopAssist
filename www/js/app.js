@@ -52,7 +52,7 @@ angular.module('starter', ['ngCordovaOauth','ionic','ionic-datepicker', 'starter
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
-    controller: 'logoutCtrl'
+    controller: 'logoutCtrl',
   })
 
    .state('app.items', {
@@ -65,7 +65,7 @@ angular.module('starter', ['ngCordovaOauth','ionic','ionic-datepicker', 'starter
       }
     })
 
-  .state('app.item', {
+  /*.state('app.item', {
     url: '/items/:itemId',
     views: {
       'menuContent': {
@@ -73,7 +73,7 @@ angular.module('starter', ['ngCordovaOauth','ionic','ionic-datepicker', 'starter
         controller: 'itemCtrl'
       }
     }
-  })
+  })*/
 
 
   .state('app.history', {
