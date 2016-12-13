@@ -57,17 +57,29 @@ var itemsz = LocalStorageService.getCacheArray(Database.ref_users.child(User.get
          }
       }
   }
-$scope.shops = shops;
-$scope.items = itemsz;
+         $scope.shops = shops;
+         var tempItems = [];
+            for(objects in itemsz) {
+               tempItems.push({
+                 "uid": objects,
+                 "Name":itemsz[objects].Name,
+                 "Quantity":itemsz[objects].Quantity,
+                 "Shop":itemsz[objects].Shop
+                })   
+             } 
+             //this scope must load from local
+               $scope.shops = shops;
+               $scope.items = tempItems;
+               console.log(tempItems);
+
 itemListner.listenToItems(function (items){
 
   shops = {
-         Woolworths:{isshop:false}, 
-         PicknPay:{isshop:false}, 
-         Shoprite:{isshop:false}, 
-         Spar:{isshop:false}, 
-         Other:{isshop:false},  
-                    //"pnp","shoprite","spar"]
+          Woolworths:{isshop:false}, 
+          PicknPay:{isshop:false}, 
+          Shoprite:{isshop:false}, 
+          Spar:{isshop:false}, 
+          Other:{isshop:false},  
         }
   for(shop in shops){
       console.log(shop)
@@ -93,7 +105,7 @@ itemListner.listenToItems(function (items){
              //this scope must load from local
                $scope.shops = shops;
                $scope.items = tempItems;
-               console.log(items)
+               console.log(tempItems);
           })},0,false);
        });
 // Triggered on a button click, or some other target
@@ -104,9 +116,9 @@ $scope.addItem = function(){
 if(typeof window.ga !== 'undefined') {window.ga.trackEvent("Add Item", "User clicked on add item button"); }
 $scope.data = {};
 $scope.data.products = itemListner.searchNames;
- $scope.data.quantity = 1;
- $scope.up = function(){
-    $scope.data.quantity++;
+$scope.data.quantity = 1;
+$scope.up = function(){
+$scope.data.quantity++;
 }
 $scope.down = function(){
     if($scope.data.quantity > 1){
@@ -114,12 +126,11 @@ $scope.down = function(){
     }
 }
  var myPopup = $ionicPopup.show({
- title: 'Add New Item', // String. The title of the popup.
+ title: 'Add New Item', 
  scope: $scope,
- // subTitle: 'Enter all fields', // String (optional). The sub-title of the popup.
-  templateUrl: 'templates/pop_up.html', // String (optional). The URL of an html template to place in the popup   body.
+  templateUrl: 'templates/pop_up.html', 
   buttons: [
-      { // Array[Object] (optional). Buttons to place in the popup footer.
+      { 
     text: 'CANCEL',
     type: 'button-default',
     onTap: function(e) {
@@ -129,137 +140,7 @@ $scope.down = function(){
     text: 'SCAN',
     type: 'button-royal',
     onTap: function(e) {
-                       if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User tried to scan from pop button"); }
-                      $cordovaBarcodeScanner.scan().then(function(imageData) {
-                      if(imageData.text){
-                                 
-                                  $ionicLoading.show({template:'Scanning....'});
-                                  Scanner.getData(imageData.text,function(cb){
-                                   //$timeout(function (){
-                                   console.log(cb.data.barcodeName,"called back name")
-                                   console.log(cb.data.newOrNot,"called back ans")
-                                  // },0,false); 
-                                    //if we scraped
-                              if(cb.data.newOrNot == false){
-                                 if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User scanned and scraped product,recieved product name"); }
-                                   $ionicLoading.hide();                              
-                                  var myPopup2 = $ionicPopup.show({
-                                        title:  cb.data.barcodeName,
-                                        subTitle: 'Is this the correct name?',
-                                        buttons: [
-                                        { text: 'No',
-                                          type: 'button-assertive',
-                                          onTap: function(e) {  
-                                              if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User got incorrect product"); }                     
-                                                  Database.ref_itemCatalog.child("Wrongbarcodes").child(imageData.text).push({
-                                                      'Name': cb.data.barcodeName,
-                                                   });
-                                             myPopup2.close();
-                                             $ionicLoading.hide();
-                                            var myPopup3 = $ionicPopup.show({
-                                            title: 'Add New Item Manually', // String. The title of the popup.
-                                            scope: $scope,
-                                           // subTitle: 'Please enter name manually', // String (optional). The sub-title of the popup.
-                                            templateUrl: 'templates/pop_up.html', // String (optional). The URL of an html template to place in the popup   body.
-                                            buttons: [
-                                                { // Array[Object] (optional). Buttons to place in the popup footer.
-                                                text: 'CANCEL',
-                                                type: 'button-default',
-                                                onTap: function(e) {
-                                                }
-                                            }, 
-                                            { 
-                                                text: 'SCAN',
-                                                type: 'button-royal',
-                                                onTap: function(e) {
-                                                       $ionicPopup.alert({
-                                                        title: 'Already scanned!',  
-                                                         buttons: [{
-                                                                text:'Ok',
-                                                                type: 'button-positive'
-                                                            }]   
-                                                        });
-                                                }
-                                            }, 
-                                            {
-                                                text: 'ADD',
-                                                type: 'button-royal',
-                                                onTap: function(e) {
-                                                    
-                                                if (!$scope.data.name ) {
-                                                        e.preventDefault();
-                                                        $ionicPopup.alert({
-                                                        title: 'Please enter item name!', 
-                                                         buttons: [{
-                                                                text:'Ok',
-                                                                type: 'button-positive'
-                                                            }]    
-                                                        });
-                                                    }
-                                                    else if(!$scope.data.quantity){
-                                                        e.preventDefault();
-                                                        $ionicPopup.alert({
-                                                        title: 'Please enter item quantity!',
-                                                            buttons: [{
-                                                                text:'Ok',
-                                                                type: 'button-positive'
-                                                            }]  
-                                                        });
-                                                    }
-                                                    else {
-                                                                console.log("Pushing item");
-                                                                Database.ref_users.child(User.getMyuid()).child('Items').push({
-                                                                'Name': $scope.data.name,
-                                                                'Quantity': $scope.data.quantity,
-                                                                'Shop':"Other",// $scope.data.shop,
-                                                            });
-                                                            myPopup3.close();
-                                                            }
-                                                }
-                                            }]
-                                            })
-                                            }
-                                          },
-                                           {
-                                            text: '<b>Yes</b>',
-                                            type: 'button-royal',
-                                            onTap: function(e) {
-                                                 if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User scanned and recieved a correct product"); }
-                                                      Database.ref_itemCatalog.child("Rightbarcodes").child(imageData.text).push({
-                                                          'Name': cb.data.barcodeName,
-                                                      });
-                                                      myPopup2.close();
-                                                  $ionicLoading.hide();
-                                                  $scope.data.name = cb.data.barcodeName;
-                                                  console.log("Pushing item");
-                                                                Database.ref_users.child(User.getMyuid()).child('Items').push({
-                                                                'Name': $scope.data.name,
-                                                                'Quantity': $scope.data.quantity,
-                                                                'Shop':"Other",// $scope.data.shop,
-                                                            });
-                                                            myPopup3.close();
-
-                                        }
-                                         }]
-                                   })
- //finish pop up two                         
-                               }else{
-                                    if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User scanned an known product in the db"); }
-                                    $ionicLoading.hide();
-                                    $scope.data.name = cb.data.barcodeName;
-                                                                console.log("Pushing item");
-                                                                Database.ref_users.child(User.getMyuid()).child('Items').push({
-                                                                'Name': $scope.data.name,
-                                                                'Quantity': $scope.data.quantity,
-                                                                'Shop':"Other",// $scope.data.shop,
-                                                            });
-                               }    
-                           });        
-                        }
-
-                       }, function(error) {
-                        console.log("An error happened -> " + error);
-                   });
+           
     }
   }, 
   {
@@ -604,148 +485,79 @@ $timeout(function (){
             }
             Activities.chosenItems = []; 
             } },3000,false);
-            //},1000,false);
         }
-  
-})
 
-.controller('scanCtrl', function(LocalStorageService,$ionicModal,$ionicLoading, $cordovaBarcodeScanner,Scanner,Activities,$scope,
-                  $rootScope,$timeout, $ionicPopup,$ionicListDelegate, Database, itemListner,User){
-    if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User scanning item from menu tab"); }
-$scope.scanItem = function(){
-if(typeof window.ga !== 'undefined'){ window.ga.trackEvent("Scan", "scanning item"); }
-$scope.data = {};
-$scope.data.products = itemListner.searchNames;
- $scope.data.quantity = 1;
+        $rootScope.scanItem = function(){
+             if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User tried to scan from pop button"); }
                       $cordovaBarcodeScanner.scan().then(function(imageData) {
                       if(imageData.text){
                                  
-                                  $ionicLoading.show({template:'Scanning....'});
-                                  Scanner.getData(imageData.text,function(cb){
-                                   //$timeout(function (){
-                                   console.log(cb.data.barcodeName,"called back name")
-                                   console.log(cb.data.newOrNot,"called back ans")
-                                  // },0,false); 
-                                    //if we scraped
-                              if(cb.data.newOrNot == false){
+                              $ionicLoading.show({template:'Scanning....'});
+                              Scanner.getData(imageData.text,function(cb){
+                              console.log(cb.data.barcodeName,"called back name")
+                              console.log(cb.data.newOrNot,"called back ans")
 
+                              if(cb.data.newOrNot == false){
+                                 if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User scanned and scraped product,recieved product name"); }
                                    $ionicLoading.hide();                              
-                                  var myPopup2 = $ionicPopup.show({
+                                   var myPopup2 = $ionicPopup.show({
                                         title:  cb.data.barcodeName,
-                                        subTitle: 'Is this the correct name',
+                                        subTitle: 'Is this the correct name?',
                                         buttons: [
                                         { text: 'No',
                                           type: 'button-assertive',
-                                          onTap: function(e) {                        
+                                          onTap: function(e) {  
+                                              if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User got incorrect product"); }                     
                                                   Database.ref_itemCatalog.child("Wrongbarcodes").child(imageData.text).push({
                                                       'Name': cb.data.barcodeName,
                                                    });
                                              myPopup2.close();
                                              $ionicLoading.hide();
-                                            var myPopup3 = $ionicPopup.show({
-                                            title: 'Add New Item Manually', // String. The title of the popup.
-                                            scope: $scope,
-                                           // subTitle: 'Please enter name manually', // String (optional). The sub-title of the popup.
-                                            templateUrl: 'templates/pop_up.html', // String (optional). The URL of an html template to place in the popup   body.
-                                            buttons: [
-                                                { // Array[Object] (optional). Buttons to place in the popup footer.
-                                                text: 'CANCEL',
-                                                type: 'button-default',
-                                                onTap: function(e) {
-                                                }
-                                            }, 
-                                            { 
-                                                text: 'SCAN',
-                                                type: 'button-royal',
-                                                onTap: function(e) {
-                                                       $ionicPopup.alert({
-                                                        title: 'Already scanned!',  
-                                                         buttons: [{
-                                                                text:'Ok',
-                                                                type: 'button-positive'
-                                                            }]   
-                                                        });
-                                                }
-                                            }, 
-                                            {
-                                                text: 'ADD',
-                                                type: 'button-royal',
-                                                onTap: function(e) {
-                                                if (!$scope.data.name ) {
-                                                        e.preventDefault();
-                                                        $ionicPopup.alert({
-                                                        title: 'Please enter item name!', 
-                                                         buttons: [{
-                                                                text:'Ok',
-                                                                type: 'button-positive'
-                                                            }]    
-                                                        });
-                                                    }
-                                                    else if(!$scope.data.quantity){
-                                                        e.preventDefault();
-                                                        $ionicPopup.alert({
-                                                        title: 'Please enter item quantity!',
-                                                            buttons: [{
-                                                                text:'Ok',
-                                                                type: 'button-positive'
-                                                            }]  
-                                                        });
-                                                    }
-                                                    else {
-                                                            console.log("Pushing item");
-
-                                                                Database.ref_users.child(User.getMyuid()).child('Items').push({
-                                                                'Name': $scope.data.name,
-                                                                'Quantity': $scope.data.quantity,
-                                                                'Shop':"Other",// $scope.data.shop,
-                                                            });
-                                                            myPopup3.close();
-                                                            }
-                                                }
-                                            }]
-                                            })
+                                             $scope.addItem();
                                             }
                                           },
                                            {
                                             text: '<b>Yes</b>',
                                             type: 'button-royal',
-                                            onTap: function(e) { 
+                                            onTap: function(e) {
+                                                 if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User scanned and recieved a correct product"); }
                                                       Database.ref_itemCatalog.child("Rightbarcodes").child(imageData.text).push({
                                                           'Name': cb.data.barcodeName,
                                                       });
-                                             myPopup2.close();
-                                             $ionicLoading.hide();
-                                             $scope.data.name = cb.data.barcodeName;
-                                             console.log("Pushing item");
-                                             Database.ref_users.child(User.getMyuid()).child('Items').push({
-                                                                'Name': $scope.data.name,
-                                                                'Quantity': $scope.data.quantity,
+                                                      myPopup2.close();
+                                                  $ionicLoading.hide();
+                                                  console.log("Pushing item");
+                                                                Database.ref_users.child(User.getMyuid()).child('Items').push({
+                                                                'Name': cb.data.barcodeName,
+                                                                'Quantity':1,
                                                                 'Shop':"Other",// $scope.data.shop,
                                                             });
-                                                    
+                                                            myPopup3.close();
+
                                         }
                                          }]
                                    })
  //finish pop up two                         
                                }else{
+                                    if(typeof window.ga !== 'undefined') { window.ga.trackEvent("Scan", "User scanned an known product in the db"); }
                                     $ionicLoading.hide();
-                                    $scope.data.name = cb.data.barcodeName;
-                                    console.log("Pushing item");
-                                                    Database.ref_users.child(User.getMyuid()).child('Items').push({
-                                                    'Name': $scope.data.name,
-                                                    'Quantity': $scope.data.quantity,
-                                                    'Shop':"Other",// $scope.data.shop,
-                                                     });
-                               }       
-                           });
-                           $state.go('app.items');        
+                                                                console.log("Pushing item");
+                                                                Database.ref_users.child(User.getMyuid()).child('Items').push({
+                                                                'Name': cb.data.barcodeName,
+                                                                'Quantity': 1,
+                                                                'Shop':"Other",// $scope.data.shop,
+                                                            });
+                               }    
+                           });        
                         }
 
                        }, function(error) {
                         console.log("An error happened -> " + error);
                    });
-    
-}})
+        }
+  
+})
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 .controller('historyCtrl', function( $state,$window,$ionicLoading,User,$scope,$timeout,Database,itemHistoryListner,LocalStorageService) {
     if(typeof $window.ga !== 'undefined') { $window.ga.trackView("history View"); }
