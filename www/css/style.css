@@ -356,8 +356,10 @@ input:-ms-input-placeholder { /* IE10+ *//*
     background-color: transparent;
 }
 .popup-body {
-    padding-bottom: 70%;
-    padding-top: 15%;
+    padding-bottom: 60%;
+    padding-top: 22%;
+    margin-top: 10%;
+    margin-bottom: 10%;
  
 }
 .xspace{

@@ -69,7 +69,7 @@ var itemsz = LocalStorageService.getCacheArray(Database.ref_users.child(User.get
              } 
              //this scope must load from local
                $scope.shops = shops;
-               $scope.items = tempItems;
+               $scope.items = tempItems.reverse();
                console.log(tempItems);
 
     itemListner.listenToItems(function (items){
@@ -104,7 +104,7 @@ var itemsz = LocalStorageService.getCacheArray(Database.ref_users.child(User.get
              } 
              //this scope must load from local
                $scope.shops = shops;
-               $scope.items = tempItems;
+               $scope.items = tempItems.reverse();
                console.log(tempItems);
           })},0,false);
        });
@@ -747,8 +747,15 @@ if(x==false){
            console.log("history empty")
         }
         else{
-            $scope.dates = dateHistory;
-            Object.assign(currentHistory,dateHistory)
+           var newObject = {};
+           var keys = Object.keys(dateHistory).reverse()
+           var i = 0;
+            for(date in dateHistory){
+             newObject[keys[i]] = dateHistory[keys[i]]
+             i++;
+            }
+            $scope.dates = newObject;
+            Object.assign(currentHistory,newObject)
           }
           })},0,false);
        });
@@ -768,7 +775,6 @@ if(x==false){
            console.log("more history empty")
         }
         else{
-         console.log(temp2, dateHistory)
         for(key in dateHistory){
               for(key2 in temp2){
                     if(key == key2){
@@ -777,9 +783,17 @@ if(x==false){
                     }
               }
           }
-            Object.assign(currentHistory,dateHistory)
+           var newObject = {};
+           var keys = Object.keys(dateHistory).reverse()
+           var i = 0;
+            for(date in dateHistory){
+             newObject[keys[i]] = dateHistory[keys[i]]
+             i++;
+            }
+            Object.assign(currentHistory,newObject)
+            console.log(currentHistory)
             $scope.dates = currentHistory;
-            temp2 = dateHistory;
+            temp2 =  newObject;
             $scope.$broadcast('scroll.infiniteScrollComplete');
           }
           })},0,false);

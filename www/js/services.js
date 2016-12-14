@@ -213,6 +213,7 @@ picker = function(callback){
                             .on('value', function(snapshot){
                               console.log("listener fired");
                               historyitems = snapshot.val()
+                              //flip
                               if(historyitems == null){
                                 callback(t,historyitems)
                               }else{
@@ -247,7 +248,9 @@ picker = function(callback){
       Database.ref_users.child(User.getMyuid()).child('Items_History').child(timeConverter(Date.now(),true,false))
       .on('value', function(snapshot) {
                 console.log("listener fired");
+                //flip
                 historyitems = snapshot.val()
+                console.log(historyitems)
                 callback(historyitems)
          });
          
@@ -257,6 +260,7 @@ picker = function(callback){
       .on('value', function(snapshot) {
                 console.log("listener fired");
                 historyitems = snapshot.val()
+                //flip
                 callback(historyitems)
          });
          
