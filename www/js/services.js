@@ -43,7 +43,7 @@ angular.module('starter.services',[])
 .factory('Scanner', function($http){
 
     getData = function(Barcode,callback) {
-          return $http.get('https://floating-headland-88014.herokuapp.com/api', {
+          return $http.get('https://quiet-harbor-92343.herokuapp.com/api', {
    params:{
             request_id: Barcode,
           }})
