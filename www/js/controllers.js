@@ -42,12 +42,11 @@ $scope.closeModal2();
  //this scope must load from local
 var itemsz = LocalStorageService.getCacheArray(Database.ref_users.child(User.getMyuid()).child('Items').toString());
     shops = {
+         Other:{isshop:false}, 
          Woolworths:{isshop:false}, 
          PicknPay:{isshop:false}, 
          Shoprite:{isshop:false}, 
          Spar:{isshop:false}, 
-         Other:{isshop:false}, 
-                    //"pnp","shoprite","spar"]
         }
   for(shop in shops){
       console.log(shop)
