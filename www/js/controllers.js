@@ -74,11 +74,11 @@ var itemsz = LocalStorageService.getCacheArray(Database.ref_users.child(User.get
     itemListner.listenToItems(function (items){
 
   shops = {
+          Other:{isshop:false},
           Woolworths:{isshop:false}, 
           PicknPay:{isshop:false}, 
           Shoprite:{isshop:false}, 
-          Spar:{isshop:false}, 
-          Other:{isshop:false},  
+          Spar:{isshop:false},   
         }
   for(shop in shops){
       console.log(shop)
