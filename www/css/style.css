@@ -5,7 +5,7 @@ a.item-content.activated{
 background-color: white!important;
 }
 .item{
-  overflow:visible;
+  overflow:visible!important;
 }
 .loginlink{
  border:none!important;
